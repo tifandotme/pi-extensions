@@ -1,6 +1,6 @@
 {
   "name": "@tifan/pi-copy-all",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Copy all assistant messages from the current pi session to the clipboard.",
   "keywords": [
     "clipboard",

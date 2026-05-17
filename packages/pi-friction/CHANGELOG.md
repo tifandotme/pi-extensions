@@ -1,5 +1,11 @@
 # @tifan/pi-friction
 
+## 0.1.1
+
+### Patch Changes
+
+- [`48e1167`](https://github.com/tifandotme/pi-extensions/commit/48e11674378fd22b74a319d8fd3ce6c7919e47df) Thanks [@tifandotme](https://github.com/tifandotme)! - update readme, fix type error in inline-skills package
+
 ## 0.1.0
 
 ### Minor Changes

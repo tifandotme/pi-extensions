@@ -1,6 +1,6 @@
 {
   "name": "@tifan/pi-recap",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Rolling session recap shown in the pi titlebar.",
   "keywords": [
     "pi",
