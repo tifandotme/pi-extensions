@@ -1,6 +1,6 @@
 {
   "name": "@tifan/pi-inline-skills",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Inline $skill autocomplete in the pi editor.",
   "keywords": [
     "autocomplete",
