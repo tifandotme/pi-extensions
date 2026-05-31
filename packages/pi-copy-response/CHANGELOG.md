@@ -1,5 +1,11 @@
 # @tifan/pi-copy-response
 
+## 0.2.1
+
+### Patch Changes
+
+- [`f1cfdbd`](https://github.com/tifandotme/pi-extensions/commit/f1cfdbdb9cd36e61cd63cb8f21e0cfff1ead17fc) Thanks [@tifandotme](https://github.com/tifandotme)! - update readme
+
 ## 0.2.0
 
 ### Minor Changes
