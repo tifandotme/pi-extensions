@@ -1,6 +1,6 @@
 {
   "name": "@tifan/pi-preferred-thinking",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Persist preferred thinking level per model in pi.",
   "keywords": [
     "pi",

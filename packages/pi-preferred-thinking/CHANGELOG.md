@@ -1,5 +1,11 @@
 # @tifan/pi-preferred-thinking
 
+## 0.2.1
+
+### Patch Changes
+
+- [`e5567f3`](https://github.com/tifandotme/pi-extensions/commit/e5567f35167c64bee8c28c14d4a578d740d93b17) Thanks [@tifandotme](https://github.com/tifandotme)! - Update README.md to use remote images
+
 ## 0.2.0
 
 ### Minor Changes
