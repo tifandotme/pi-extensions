@@ -1,5 +1,11 @@
 # @tifan/pi-recap
 
+## 0.3.1
+
+### Patch Changes
+
+- [`24371e3`](https://github.com/tifandotme/pi-extensions/commit/24371e3cb7ef3186e1c9f5003a3c17bc56c99bd9) Thanks [@tifandotme](https://github.com/tifandotme)! - update readme
+
 ## 0.3.0
 
 ### Minor Changes
