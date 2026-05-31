@@ -1,5 +1,13 @@
 # @tifan/pi-preferred-thinking
 
+## 0.2.0
+
+### Minor Changes
+
+- [`fc010bd`](https://github.com/tifandotme/pi-extensions/commit/fc010bd7ca4c88c8560c00fa2d299dfab7bcdc0f) Thanks [@tifandotme](https://github.com/tifandotme)! - Add `/preferred-thinking` for model-specific thinking preferences and `/recap config` for choosing the recap model.
+
+- [`0c3bfd7`](https://github.com/tifandotme/pi-extensions/commit/0c3bfd7b93855ed49d5072693e68bc2c54ec895a) Thanks [@tifandotme](https://github.com/tifandotme)! - store settings in <agent dir>/extensions/<extension name>.json
+
 ## 0.1.1
 
 ### Patch Changes
