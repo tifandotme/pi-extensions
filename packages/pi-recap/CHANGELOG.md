@@ -1,5 +1,11 @@
 # @tifan/pi-recap
 
+## 0.2.0
+
+### Minor Changes
+
+- [`b94b3db`](https://github.com/tifandotme/pi-extensions/commit/b94b3db3a834217cdb7af9e20fc3610d63903745) Thanks [@tifandotme](https://github.com/tifandotme)! - recap should behaves similarly to Claude Code. it now works on-demmand and away-aware
+
 ## 0.1.1
 
 ### Patch Changes

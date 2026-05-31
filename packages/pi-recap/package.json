@@ -1,6 +1,6 @@
 {
   "name": "@tifan/pi-recap",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "One-line session recap on demand or after you have been away.",
   "keywords": [
     "pi",
