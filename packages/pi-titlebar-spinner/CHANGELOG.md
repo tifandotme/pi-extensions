@@ -1,5 +1,11 @@
 # @tifan/pi-titlebar-spinner
 
+## 0.1.2
+
+### Patch Changes
+
+- [`63f8882`](https://github.com/tifandotme/pi-extensions/commit/63f88829f834e8821cd2ec582a6effceb30ad20e) Thanks [@tifandotme](https://github.com/tifandotme)! - Add changelog link to README and use src/ dir.
+
 ## 0.1.1
 
 ### Patch Changes

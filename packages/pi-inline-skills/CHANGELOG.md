@@ -1,5 +1,17 @@
 # @tifan/pi-inline-skills
 
+## 1.0.0
+
+### Major Changes
+
+- [`e9807bc`](https://github.com/tifandotme/pi-extensions/commit/e9807bcb6f519a48fb11bccec3f6652d8e02caeb) Thanks [@tifandotme](https://github.com/tifandotme)! - Switch inline skill tokens from `$skill` to `/skill`, including prompts that start with an inline skill, while preserving registered pi slash commands.
+
+### Patch Changes
+
+- [`65d8fe1`](https://github.com/tifandotme/pi-extensions/commit/65d8fe1cd639b8dcf1f55919ebbeff0c781a5ebd) Thanks [@tifandotme](https://github.com/tifandotme)! - Improve README with updated usage details and screenshots.
+
+- [`f343acd`](https://github.com/tifandotme/pi-extensions/commit/f343acdb1f3a531832ad15aca1ad280f9c49f1e4) Thanks [@tifandotme](https://github.com/tifandotme)! - Show inline skill autocomplete entries with Pi-style `skill:` labels and source tags.
+
 ## 0.1.1
 
 ### Patch Changes

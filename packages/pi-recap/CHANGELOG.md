@@ -1,5 +1,13 @@
 # @tifan/pi-recap
 
+## 0.4.1
+
+### Patch Changes
+
+- [`3df7dfd`](https://github.com/tifandotme/pi-extensions/commit/3df7dfdd1cbc76f3e0d4bb56fe8b31d6b006270f) Thanks [@tifandotme](https://github.com/tifandotme)! - Prevent repeated recaps from drifting by ignoring prior recap state when choosing the session context to summarize.
+
+- [`3370df5`](https://github.com/tifandotme/pi-extensions/commit/3370df5b3514673d6f7ca702e3af06466129d800) Thanks [@tifandotme](https://github.com/tifandotme)! - Hide the footer while choosing a recap model and omit "authenticated" from the picker.
+
 ## 0.4.0
 
 ### Minor Changes
