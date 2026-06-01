@@ -1,5 +1,11 @@
 # @tifan/pi-preferred-thinking
 
+## 0.2.2
+
+### Patch Changes
+
+- [`b36a9c4`](https://github.com/tifandotme/pi-extensions/commit/b36a9c47fe8073017a54b2fb1828610fde7e66a2) Thanks [@tifandotme](https://github.com/tifandotme)! - Update readme to fix image rendering. Adjust author in package.json
+
 ## 0.2.1
 
 ### Patch Changes

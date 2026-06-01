@@ -1,5 +1,11 @@
 # @tifan/pi-recap
 
+## 0.3.4
+
+### Patch Changes
+
+- [`7766c8a`](https://github.com/tifandotme/pi-extensions/commit/7766c8a22c5f0574390451b9249e960b3049ab28) Thanks [@tifandotme](https://github.com/tifandotme)! - Make generated recaps start with the user's session goal before current state or next action.
+
 ## 0.3.3
 
 ### Patch Changes
