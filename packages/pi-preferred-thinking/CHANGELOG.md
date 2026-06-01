@@ -1,5 +1,11 @@
 # @tifan/pi-preferred-thinking
 
+## 0.2.3
+
+### Patch Changes
+
+- [`a124cb2`](https://github.com/tifandotme/pi-extensions/commit/a124cb2da3dd2f97eaa40553489597d47787b609) Thanks [@tifandotme](https://github.com/tifandotme)! - Update README. Move source files to src/.
+
 ## 0.2.2
 
 ### Patch Changes

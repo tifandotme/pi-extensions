@@ -1,5 +1,15 @@
 # @tifan/pi-recap
 
+## 0.4.0
+
+### Minor Changes
+
+- [`f27adfc`](https://github.com/tifandotme/pi-extensions/commit/f27adfcefe4706133b9648295859a928a985e55b) Thanks [@tifandotme](https://github.com/tifandotme)! - Simplify: Remove auto, picker now show all available models and searchable, default now set to gpt-5.4-mini instead of multiple fallback
+
+### Patch Changes
+
+- [`cc6d5c8`](https://github.com/tifandotme/pi-extensions/commit/cc6d5c877df4fdf3e7291f287a2a9ef54f223050) Thanks [@tifandotme](https://github.com/tifandotme)! - Update README
+
 ## 0.3.4
 
 ### Patch Changes
