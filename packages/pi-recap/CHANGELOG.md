@@ -1,5 +1,11 @@
 # @tifan/pi-recap
 
+## 0.3.3
+
+### Patch Changes
+
+- [`313f5f9`](https://github.com/tifandotme/pi-extensions/commit/313f5f96aa29cf0566b9b8ca5d0c5d0b1ef18b62) Thanks [@tifandotme](https://github.com/tifandotme)! - Update readme to fix image rendering. Adjust author in package.json
+
 ## 0.3.2
 
 ### Patch Changes
