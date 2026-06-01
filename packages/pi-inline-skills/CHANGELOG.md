@@ -1,5 +1,11 @@
 # @tifan/pi-inline-skills
 
+## 1.0.1
+
+### Patch Changes
+
+- [`e423080`](https://github.com/tifandotme/pi-extensions/commit/e423080556de1aa783efa62179fa7f3cea37812a) Thanks [@tifandotme](https://github.com/tifandotme)! - Fix slash skill completions so they replace only the typed skill query and keep the leading slash in place.
+
 ## 1.0.0
 
 ### Major Changes
