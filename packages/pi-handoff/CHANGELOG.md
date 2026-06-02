@@ -1,5 +1,11 @@
 # @tifan/pi-handoff
 
+## 1.0.0
+
+### Major Changes
+
+- [`a049f90`](https://github.com/tifandotme/pi-extensions/commit/a049f90a485de7b893574600d0aec4dbfe678999) Thanks [@tifandotme](https://github.com/tifandotme)! - Replace `/handoff` with `/handoff-session`, which generates a temp handoff document from the installed `handoff` skill, starts a clean parent-linked session, and leaves the continuation prompt in the editor for manual submit.
+
 ## 0.1.1
 
 ### Patch Changes

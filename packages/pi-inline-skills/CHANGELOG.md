@@ -1,5 +1,11 @@
 # @tifan/pi-inline-skills
 
+## 1.0.2
+
+### Patch Changes
+
+- [`b3234aa`](https://github.com/tifandotme/pi-extensions/commit/b3234aac76ab64bff8aa3e6593d97da25f573fd5) Thanks [@tifandotme](https://github.com/tifandotme)! - Show registered slash commands alongside matching inline skills so commands such as `/handoff-session` are not hidden by similarly named skills at the start of a prompt.
+
 ## 1.0.1
 
 ### Patch Changes
