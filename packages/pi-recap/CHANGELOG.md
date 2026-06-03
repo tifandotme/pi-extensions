@@ -1,5 +1,11 @@
 # @tifan/pi-recap
 
+## 0.4.2
+
+### Patch Changes
+
+- [`92437ac`](https://github.com/tifandotme/pi-extensions/commit/92437ac85738ce15f69e33119492536e8fb25bee) Thanks [@tifandotme](https://github.com/tifandotme)! - Refine the recap widget to look more like Claude Code's and show progress while manual recap generation runs.
+
 ## 0.4.1
 
 ### Patch Changes
