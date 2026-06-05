@@ -1,5 +1,11 @@
 # @tifan/pi-copy-response
 
+## 0.2.6
+
+### Patch Changes
+
+- [`f0090c2`](https://github.com/tifandotme/pi-extensions/commit/f0090c2a5c648febc7281f88c25634414af22b99) Thanks [@tifandotme](https://github.com/tifandotme)! - Use Pi 0.78.1's new `ctx.mode` field to require interactive TUI mode before opening the `/copy-response` picker.
+
 ## 0.2.5
 
 ### Patch Changes

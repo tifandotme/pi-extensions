@@ -1,6 +1,6 @@
 {
   "name": "@tifan/pi-fixed-editor",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Keep the pi editor and footer fixed while the transcript scrolls.",
   "keywords": [
     "fixed-editor",

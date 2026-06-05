@@ -1,5 +1,11 @@
 # @tifan/pi-handoff
 
+## 1.0.1
+
+### Patch Changes
+
+- [`f0090c2`](https://github.com/tifandotme/pi-extensions/commit/f0090c2a5c648febc7281f88c25634414af22b99) Thanks [@tifandotme](https://github.com/tifandotme)! - Use Pi 0.78.1's new extension context APIs so `/handoff-session` records loaded skills and context file paths from system prompt options, and gates its custom UI with `ctx.mode`.
+
 ## 1.0.0
 
 ### Major Changes

@@ -1,5 +1,11 @@
 # @tifan/pi-inline-skills
 
+## 1.0.3
+
+### Patch Changes
+
+- [`f0090c2`](https://github.com/tifandotme/pi-extensions/commit/f0090c2a5c648febc7281f88c25634414af22b99) Thanks [@tifandotme](https://github.com/tifandotme)! - Use Pi 0.78.1's new system prompt options API so `/loaded-skills` reports skills from Pi's loaded prompt context.
+
 ## 1.0.2
 
 ### Patch Changes

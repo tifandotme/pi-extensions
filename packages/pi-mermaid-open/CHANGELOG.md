@@ -1,5 +1,11 @@
 # @tifan/pi-mermaid-open
 
+## 0.1.2
+
+### Patch Changes
+
+- [`f0090c2`](https://github.com/tifandotme/pi-extensions/commit/f0090c2a5c648febc7281f88c25634414af22b99) Thanks [@tifandotme](https://github.com/tifandotme)! - Use Pi 0.78.1's new `ctx.mode` field to render the latest Mermaid diagram without opening the interactive picker outside TUI mode.
+
 ## 0.1.1
 
 ### Patch Changes
