@@ -1,5 +1,11 @@
 # @tifan/pi-fixed-editor
 
+## 0.2.2
+
+### Patch Changes
+
+- [`2d7393e`](https://github.com/tifandotme/pi-extensions/commit/2d7393e6451851237d2f37fc3b29ba5545b62a4f) Thanks [@tifandotme](https://github.com/tifandotme)! - Scroll the transcript back to the bottom when submitting a query with Enter.
+
 ## 0.2.1
 
 ### Patch Changes

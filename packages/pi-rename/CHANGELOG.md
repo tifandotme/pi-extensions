@@ -1,5 +1,11 @@
 # @tifan/pi-rename
 
+## 0.3.0
+
+### Minor Changes
+
+- [`57565bd`](https://github.com/tifandotme/pi-extensions/commit/57565bd14cf86cb51ca5ba5c6d937568fc4e251f) Thanks [@tifandotme](https://github.com/tifandotme)! - Sync Herdr tab labels with saved pi session names on resume, and reset matching tab labels to the tab number when pi quits.
+
 ## 0.2.0
 
 ### Minor Changes
