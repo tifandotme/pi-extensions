@@ -1,5 +1,11 @@
 # @tifan/pi-inline-skills
 
+## 1.0.5
+
+### Patch Changes
+
+- [`3774007`](https://github.com/tifandotme/pi-extensions/commit/37740077983cfd5d6f7f5888de04ac3f2b0ed84e) Thanks [@tifandotme](https://github.com/tifandotme)! - Keep slash skill tokens unchanged in submitted prompts and restore loaded skills from the current session branch so rewound prompts inject the right skill content.
+
 ## 1.0.4
 
 ### Patch Changes
