@@ -1,5 +1,11 @@
 # @tifan/pi-fixed-editor
 
+## 0.2.3
+
+### Patch Changes
+
+- [`37641b9`](https://github.com/tifandotme/pi-extensions/commit/37641b9cb235e49dbef84d8271ac106695a94924) Thanks [@tifandotme](https://github.com/tifandotme)! - Avoid an extra render request when plain Enter scrolls the transcript back to the bottom.
+
 ## 0.2.2
 
 ### Patch Changes

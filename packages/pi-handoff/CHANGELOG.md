@@ -1,5 +1,16 @@
 # @tifan/pi-handoff
 
+## 1.1.0
+
+### Minor Changes
+
+- [`38bebf2`](https://github.com/tifandotme/pi-extensions/commit/38bebf2827c37f1fcefe7de585c9d03dd0a7edee) Thanks [@tifandotme](https://github.com/tifandotme)! - Name new handoff sessions from the current conversation using pi-rename-style rules, with a local fallback when model naming is unavailable.
+
+### Patch Changes
+
+- Updated dependencies [[`416ac2f`](https://github.com/tifandotme/pi-extensions/commit/416ac2fecc6aa731c23ae895220bac87317152e4)]:
+  - @tifan/pi-rename@0.4.0
+
 ## 1.0.1
 
 ### Patch Changes

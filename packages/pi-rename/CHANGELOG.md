@@ -1,5 +1,11 @@
 # @tifan/pi-rename
 
+## 0.4.0
+
+### Minor Changes
+
+- [`416ac2f`](https://github.com/tifandotme/pi-extensions/commit/416ac2fecc6aa731c23ae895220bac87317152e4) Thanks [@tifandotme](https://github.com/tifandotme)! - Expose the rename naming utilities through the package exports for reuse.
+
 ## 0.3.0
 
 ### Minor Changes
