@@ -1,5 +1,11 @@
 # @tifan/pi-inline-skills
 
+## 1.0.4
+
+### Patch Changes
+
+- [`8d3f053`](https://github.com/tifandotme/pi-extensions/commit/8d3f053f9b57110111fbdae696bb978fbc162dd0) Thanks [@tifandotme](https://github.com/tifandotme)! - Load inline skill content directly so hidden skills work and rendered skill blocks match Pi's native skill display.
+
 ## 1.0.3
 
 ### Patch Changes
