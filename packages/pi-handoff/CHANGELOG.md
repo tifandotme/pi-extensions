@@ -1,5 +1,14 @@
 # @tifan/pi-handoff
 
+## 1.1.1
+
+### Patch Changes
+
+- [`ba259a0`](https://github.com/tifandotme/pi-extensions/commit/ba259a0c990563e4dad3443371cc2ed31d122cd0) Thanks [@tifandotme](https://github.com/tifandotme)! - Keep model-powered handoffs and session names compatible with Pi 0.80.
+
+- Updated dependencies [[`ba259a0`](https://github.com/tifandotme/pi-extensions/commit/ba259a0c990563e4dad3443371cc2ed31d122cd0)]:
+  - @tifan/pi-rename@0.4.1
+
 ## 1.1.0
 
 ### Minor Changes

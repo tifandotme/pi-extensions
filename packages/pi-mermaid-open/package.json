@@ -1,6 +1,6 @@
 {
   "name": "@tifan/pi-mermaid-open",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Extract and open Mermaid diagrams from pi agent responses.",
   "keywords": [
     "diagram",

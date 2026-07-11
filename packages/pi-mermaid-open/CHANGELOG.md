@@ -1,5 +1,11 @@
 # @tifan/pi-mermaid-open
 
+## 0.1.3
+
+### Patch Changes
+
+- [`4422307`](https://github.com/tifandotme/pi-extensions/commit/4422307cca8914fa254071bdbb52e0af14e9cb71) Thanks [@tifandotme](https://github.com/tifandotme)! - Prevent `/mermaid-open` from failing when Puppeteer downloads an unused Chrome binary.
+
 ## 0.1.2
 
 ### Patch Changes

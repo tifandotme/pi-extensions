@@ -1,6 +1,6 @@
 {
   "name": "@tifan/pi-handoff",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Transfer pi session context to a new session and query past sessions.",
   "keywords": [
     "handoff",
@@ -29,7 +29,7 @@
     "provenance": true
   },
   "dependencies": {
-    "@tifan/pi-rename": "^0.4.0"
+    "@tifan/pi-rename": "^0.4.1"
   },
   "engines": {
     "node": ">=20"

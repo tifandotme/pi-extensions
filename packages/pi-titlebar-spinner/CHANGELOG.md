@@ -1,5 +1,11 @@
 # @tifan/pi-titlebar-spinner
 
+## 0.1.3
+
+### Patch Changes
+
+- [`ba259a0`](https://github.com/tifandotme/pi-extensions/commit/ba259a0c990563e4dad3443371cc2ed31d122cd0) Thanks [@tifandotme](https://github.com/tifandotme)! - Wait for Pi to settle before scheduling recaps or clearing the titlebar spinner.
+
 ## 0.1.2
 
 ### Patch Changes
