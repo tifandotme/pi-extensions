@@ -1,5 +1,11 @@
 # @tifan/pi-fixed-editor
 
+## 0.2.4
+
+### Patch Changes
+
+- [`1664d2d`](https://github.com/tifandotme/pi-extensions/commit/1664d2d03b5518186e903002052ec1bdd8d50e6d) Thanks [@tifandotme](https://github.com/tifandotme)! - Fix Kitty image cleanup when scrolling the transcript.
+
 ## 0.2.3
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@tifan/pi-rename",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Generate pi session names and rename the current Herdr tab.",
   "keywords": [
     "herdr",

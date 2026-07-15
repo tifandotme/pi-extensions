@@ -1,5 +1,14 @@
 # @tifan/pi-handoff
 
+## 1.1.2
+
+### Patch Changes
+
+- [`edf72a2`](https://github.com/tifandotme/pi-extensions/commit/edf72a238757bfd71d32ebe9f0d3f14653e21d87) Thanks [@tifandotme](https://github.com/tifandotme)! - Use gpt-5.6-luna as the default model for naming handoff sessions.
+
+- Updated dependencies [[`b27ba8a`](https://github.com/tifandotme/pi-extensions/commit/b27ba8aef49ea00879cec87d913840f39e02b19e)]:
+  - @tifan/pi-rename@0.4.2
+
 ## 1.1.1
 
 ### Patch Changes

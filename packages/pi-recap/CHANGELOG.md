@@ -1,5 +1,11 @@
 # @tifan/pi-recap
 
+## 0.4.4
+
+### Patch Changes
+
+- [`18847c3`](https://github.com/tifandotme/pi-extensions/commit/18847c311929d81fb8f993b2277c9e122398dc84) Thanks [@tifandotme](https://github.com/tifandotme)! - Use gpt-5.6-luna as the default recap model.
+
 ## 0.4.3
 
 ### Patch Changes

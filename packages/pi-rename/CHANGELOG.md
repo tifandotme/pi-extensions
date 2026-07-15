@@ -1,5 +1,11 @@
 # @tifan/pi-rename
 
+## 0.4.2
+
+### Patch Changes
+
+- [`b27ba8a`](https://github.com/tifandotme/pi-extensions/commit/b27ba8aef49ea00879cec87d913840f39e02b19e) Thanks [@tifandotme](https://github.com/tifandotme)! - Use gpt-5.6-luna by default and keep Herdr tab names after quitting Pi.
+
 ## 0.4.1
 
 ### Patch Changes
