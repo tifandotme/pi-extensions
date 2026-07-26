@@ -1,5 +1,11 @@
 # @tifan/pi-fixed-editor
 
+## 0.2.5
+
+### Patch Changes
+
+- [`e954834`](https://github.com/tifandotme/pi-extensions/commit/e954834a8949b05671acafff7dd55e39fcd21c8b) Thanks [@tifandotme](https://github.com/tifandotme)! - Prevent footer flicker and freezes when rapidly scrolling long transcripts.
+
 ## 0.2.4
 
 ### Patch Changes
