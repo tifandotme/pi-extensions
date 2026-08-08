@@ -1,5 +1,11 @@
 # @tifan/pi-fixed-editor
 
+## 0.2.6
+
+### Patch Changes
+
+- [#24](https://github.com/tifandotme/pi-extensions/pull/24) [`c2478b3`](https://github.com/tifandotme/pi-extensions/commit/c2478b340498d45206f3dc3917bb3bc6eeed78dd) Thanks [@HerbertGao](https://github.com/HerbertGao)! - Reduce editor flicker while Pi streams responses.
+
 ## 0.2.5
 
 ### Patch Changes
