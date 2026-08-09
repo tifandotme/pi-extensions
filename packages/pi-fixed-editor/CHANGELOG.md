@@ -1,5 +1,11 @@
 # @tifan/pi-fixed-editor
 
+## 0.3.0
+
+### Minor Changes
+
+- [`ebc3f6a`](https://github.com/tifandotme/pi-extensions/commit/ebc3f6a7ab82db5f80385e7f788a43d8b8df0efc) Thanks [@tifandotme](https://github.com/tifandotme)! - Deprecate the extension in favor of Pi's native fullscreen mode while preserving frozen support for Pi versions before 0.84.
+
 ## 0.2.7
 
 ### Patch Changes
