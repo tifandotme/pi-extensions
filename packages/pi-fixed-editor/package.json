@@ -1,6 +1,6 @@
 {
   "name": "@tifan/pi-fixed-editor",
-  "version": "0.2.7",
+  "version": "0.3.0",
   "description": "Legacy fixed editor for Pi versions before 0.84.",
   "keywords": [
     "fixed-editor",
