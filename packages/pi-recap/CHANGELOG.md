@@ -1,5 +1,11 @@
 # @tifan/pi-recap
 
+## 0.4.5
+
+### Patch Changes
+
+- [`12ef66c`](https://github.com/tifandotme/pi-extensions/commit/12ef66c7ec6efe04202c91f70e20cd97e9c167f3) Thanks [@tifandotme](https://github.com/tifandotme)! - Require Pi 0.84.2 or newer for recap generation.
+
 ## 0.4.4
 
 ### Patch Changes

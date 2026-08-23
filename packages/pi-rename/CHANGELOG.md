@@ -1,5 +1,11 @@
 # @tifan/pi-rename
 
+## 0.4.3
+
+### Patch Changes
+
+- [`e8709bc`](https://github.com/tifandotme/pi-extensions/commit/e8709bc388aa8e094918ec465cfab511358f18ff) Thanks [@tifandotme](https://github.com/tifandotme)! - Require Pi 0.84.2 or newer and show progress while `/rename` generates a session name.
+
 ## 0.4.2
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @tifan/pi-preferred-thinking
 
+## 1.0.0
+
+### Major Changes
+
+- [`92208f9`](https://github.com/tifandotme/pi-extensions/commit/92208f9bc3679afbb6a055d91e3860c984a2f2af) Thanks [@tifandotme](https://github.com/tifandotme)! - Move per-model thinking preferences to Pi's native `enabledModels` setting and require Pi 0.84.2 or newer.
+
 ## 0.3.0
 
 ### Minor Changes
