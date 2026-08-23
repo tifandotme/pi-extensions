@@ -1,5 +1,12 @@
 # @tifan/pi-handoff
 
+## 2.0.1
+
+### Patch Changes
+
+- Updated dependencies [[`b2ea184`](https://github.com/tifandotme/pi-extensions/commit/b2ea1841e99243aa4773bd5c33f43c40248859db)]:
+  - @tifan/pi-rename@0.5.0
+
 ## 2.0.0
 
 ### Major Changes
