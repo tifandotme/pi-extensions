@@ -1,5 +1,11 @@
 # @tifan/pi-rename
 
+## 0.5.1
+
+### Patch Changes
+
+- [`7ff6d08`](https://github.com/tifandotme/pi-extensions/commit/7ff6d089347b3f775a6b51a001a604d5054bd97a) Thanks [@tifandotme](https://github.com/tifandotme)! - Use `HERDR_TEMPORARY_LABEL` to let saved session names replace launcher-provided temporary Herdr labels without overwriting custom labels.
+
 ## 0.5.0
 
 ### Minor Changes
