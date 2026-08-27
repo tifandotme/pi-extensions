@@ -1,5 +1,11 @@
 # @tifan/pi-preferred-thinking
 
+## 1.0.1
+
+### Patch Changes
+
+- [`fa87930`](https://github.com/tifandotme/pi-extensions/commit/fa87930e125c9a757fed3540e21fd55111f5db20) Thanks [@tifandotme](https://github.com/tifandotme)! - Do not override the thinking level of Pi agents invoked with an explicit `--thinking` option.
+
 ## 1.0.0
 
 ### Major Changes

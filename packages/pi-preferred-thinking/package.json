@@ -1,6 +1,6 @@
 {
   "name": "@tifan/pi-preferred-thinking",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Set and apply per-model thinking levels from Pi's native settings.",
   "keywords": [
     "pi",
