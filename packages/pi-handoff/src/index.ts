@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto"
 import type { AgentMessage } from "@earendil-works/pi-agent-core"
 import type { Message } from "@earendil-works/pi-ai/compat"
 import {
@@ -14,6 +15,7 @@ import {
   BorderedLoader,
   convertToLlm,
   serializeConversation,
+  SessionManager,
   sessionEntryToContextMessages,
 } from "@earendil-works/pi-coding-agent"
 import { completeText } from "./complete-text.js"
@@ -98,6 +100,133 @@ function buildNewSessionPrompt(handoffPath: string): string {
     handoffPath,
     "Read the handoff, load any suggested skills, then continue the work.",
   ].join("\n\n")
+}
+
+type HerdrTabCreateResponse = {
+  result?: {
+    root_pane?: {
+      pane_id?: unknown
+    }
+  }
+}
+
+function getHerdrWorkspaceId(): string | undefined {
+  if (process.env["HERDR_ENV"] !== "1") return undefined
+
+  const workspaceId = process.env["HERDR_WORKSPACE_ID"]?.trim()
+  if (!workspaceId) {
+    throw new Error("Herdr workspace context is unavailable")
+  }
+  return workspaceId
+}
+
+function getHerdrRootPaneId(stdout: string): string | undefined {
+  try {
+    const response = JSON.parse(stdout) as HerdrTabCreateResponse
+    const paneId = response.result?.root_pane?.pane_id
+    return typeof paneId === "string" && paneId.trim() ? paneId : undefined
+  } catch {
+    return undefined
+  }
+}
+
+function getCommandError(stdout: string, stderr: string): string {
+  return stderr.trim() || stdout.trim() || "unknown error"
+}
+
+async function startHandoffInHerdr(options: {
+  pi: ExtensionAPI
+  ctx: ExtensionCommandContext
+  handoffPath: string
+  parentSession: string | undefined
+  sessionName: string
+  workspaceId: string
+}): Promise<void> {
+  const childSessionManager = SessionManager.create(
+    options.ctx.cwd,
+    undefined,
+    options.parentSession
+      ? { parentSession: options.parentSession }
+      : undefined,
+  )
+  const childSessionPath = childSessionManager.getSessionFile()
+  const childSessionHeader = childSessionManager.getHeader()
+  if (!childSessionPath || !childSessionHeader) {
+    throw new Error("Could not create a persisted handoff session")
+  }
+  await mkdir(childSessionManager.getSessionDir(), { recursive: true })
+  await writeFile(childSessionPath, `${JSON.stringify(childSessionHeader)}\n`, {
+    flag: "wx",
+  })
+
+  const createdTab = await options.pi.exec(
+    "herdr",
+    [
+      "tab",
+      "create",
+      "--workspace",
+      options.workspaceId,
+      "--cwd",
+      options.ctx.cwd,
+      "--label",
+      options.sessionName,
+      "--focus",
+    ],
+    { timeout: 5_000 },
+  )
+  if (createdTab.code !== 0) {
+    throw new Error(
+      `Could not create Herdr tab: ${getCommandError(createdTab.stdout, createdTab.stderr)}`,
+    )
+  }
+
+  const rootPaneId = getHerdrRootPaneId(createdTab.stdout)
+  if (!rootPaneId) {
+    throw new Error("Could not find the new Herdr tab's root pane")
+  }
+
+  const agentName = `handoff-${randomUUID().slice(0, 8)}`
+  const model = options.ctx.model!
+
+  const startedAgent = await options.pi.exec(
+    "herdr",
+    [
+      "agent",
+      "start",
+      agentName,
+      "--kind",
+      "pi",
+      "--pane",
+      rootPaneId,
+      "--",
+      "--session",
+      childSessionPath,
+      "--name",
+      options.sessionName,
+      "--provider",
+      model.provider,
+      "--model",
+      model.id,
+    ],
+    { timeout: 35_000 },
+  )
+  if (startedAgent.code !== 0) {
+    throw new Error(
+      `Could not start Pi in Herdr tab: ${getCommandError(startedAgent.stdout, startedAgent.stderr)}`,
+    )
+  }
+
+  const promptedAgent = await options.pi.exec("herdr", [
+    "agent",
+    "prompt",
+    agentName,
+    buildNewSessionPrompt(options.handoffPath),
+  ])
+  if (promptedAgent.code !== 0) {
+    throw new Error(
+      `Could not send the handoff prompt: ${getCommandError(promptedAgent.stdout, promptedAgent.stderr)}`,
+    )
+  }
 }
 
 function buildDocumentWithMetadata(options: {
@@ -274,6 +403,20 @@ async function runHandoff(
     parentSession,
   })
   await writeFile(handoffPath, document, "utf8")
+
+  const herdrWorkspaceId = getHerdrWorkspaceId()
+  if (herdrWorkspaceId) {
+    await startHandoffInHerdr({
+      pi,
+      ctx,
+      handoffPath,
+      parentSession,
+      sessionName,
+      workspaceId: herdrWorkspaceId,
+    })
+    ctx.ui.notify(`Handoff opened in a new Herdr tab: ${handoffPath}`, "info")
+    return
+  }
 
   await ctx.newSession({
     ...(parentSession ? { parentSession } : {}),

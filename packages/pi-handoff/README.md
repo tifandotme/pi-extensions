@@ -30,7 +30,9 @@ The marker is consumed before the prompt reaches the agent.
 - The focus is used in the handoff document.
 - A handoff document is written under the OS temp directory.
 - A new session starts automatically from the document.
-- The previous session path is included when available.
+- When Pi runs inside Herdr, the handoff opens in a new focused tab. The current parent session stays available in its original tab.
+- The handoff session keeps the parent-session link and selected provider/model when available.
+- Outside Herdr, the current session is replaced.
 
 A prompt containing only `-handoff` continues the current work.
 
