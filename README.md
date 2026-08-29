@@ -17,13 +17,13 @@ Wondering which packages I use myself? See my [current pi settings](https://gith
 | [`@tifan/pi-preferred-thinking`](packages/pi-preferred-thinking) | ![npm monthly downloads](https://img.shields.io/npm/dm/@tifan/pi-preferred-thinking) | Set and apply per-model thinking levels from Pi's native settings.      |
 | [`@tifan/pi-recap`](packages/pi-recap)                           | ![npm monthly downloads](https://img.shields.io/npm/dm/@tifan/pi-recap)              | One-line session recap on demand or after you have been away.           |
 | [`@tifan/pi-stash`](packages/pi-stash)                           | ![npm monthly downloads](https://img.shields.io/npm/dm/@tifan/pi-stash)              | Stash one draft and restore it after the next message.                  |
-| [`@tifan/pi-titlebar-spinner`](packages/pi-titlebar-spinner)     | ![npm monthly downloads](https://img.shields.io/npm/dm/@tifan/pi-titlebar-spinner)   | Show a spinner in the pi titlebar while the agent runs.                 |
 
 ## Deprecated
 
-| Package                                              | Downloads                                                                      | Description                                                       |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------ | ----------------------------------------------------------------- |
-| [`@tifan/pi-fixed-editor`](packages/pi-fixed-editor) | ![npm monthly downloads](https://img.shields.io/npm/dm/@tifan/pi-fixed-editor) | Keep the pi editor and footer fixed while the transcript scrolls. |
+| Package                                                      | Downloads                                                                          | Description                                                       |
+| ------------------------------------------------------------ | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| [`@tifan/pi-fixed-editor`](packages/pi-fixed-editor)         | ![npm monthly downloads](https://img.shields.io/npm/dm/@tifan/pi-fixed-editor)     | Keep the pi editor and footer fixed while the transcript scrolls. |
+| [`@tifan/pi-titlebar-spinner`](packages/pi-titlebar-spinner) | ![npm monthly downloads](https://img.shields.io/npm/dm/@tifan/pi-titlebar-spinner) | Show a spinner in the Herdr tab title while the agent runs.       |
 
 ## Install
 
