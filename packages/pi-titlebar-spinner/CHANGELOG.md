@@ -1,5 +1,11 @@
 # @tifan/pi-titlebar-spinner
 
+## 1.1.0
+
+### Minor Changes
+
+- [`8a9b0b1`](https://github.com/tifandotme/pi-extensions/commit/8a9b0b108f26bffdce982a94ce5dc678280b34c8) Thanks [@tifandotme](https://github.com/tifandotme)! - Deprecate the extension and freeze support.
+
 ## 1.0.0
 
 ### Major Changes
