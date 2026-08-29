@@ -14,10 +14,10 @@ Run `/fast` to toggle Fast Mode for the current model. The setting is saved per 
 
 Run `/tps` to toggle response TPS. The setting is saved in the same configuration file.
 
-When Fast Mode is enabled, the footer shows:
+When Fast Mode is enabled, the footer status shows:
 
 ```text
-⚡ (openai-codex) gpt-5.6-luna
+⚡ Fast Mode
 ```
 
 When TPS is enabled, the status shows the latest response rate, median response rate, and median time to first token:
