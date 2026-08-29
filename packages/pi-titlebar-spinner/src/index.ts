@@ -1,7 +1,7 @@
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent"
 
-const FRAMES = ["◐", "◓", "◑", "◒"]
-const INTERVAL_MS = 80
+const FRAMES = ["\\", "-", "/", "|"]
+const INTERVAL_MS = 100
 
 type HerdrTabResponse = {
   result?: {
