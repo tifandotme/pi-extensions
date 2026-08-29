@@ -14,7 +14,6 @@ type FastConfig = {
 
 type Model = NonNullable<ExtensionContext["model"]>
 const CONFIG_PATH = join(getAgentDir(), "extensions", "pi-fast-mode.json")
-const FAST_ICON = "⚡"
 const DEFAULT_SERVICE_TIER = "priority"
 const FAST_TARGETS = new Set([
   "openai/gpt-5.4",
@@ -120,17 +119,6 @@ export default function piFastExtension(pi: ExtensionAPI): void {
     tpsEnabled = enabled
   })
 
-  function updateFooter(ctx: ExtensionContext): void {
-    if (!ctx.hasUI) return
-
-    ctx.ui.setStatus(
-      "fast-mode",
-      isFastModel(ctx.model, enabledModels)
-        ? `${FAST_ICON} Fast Mode`
-        : undefined,
-    )
-  }
-
   function loadConfig(ctx: ExtensionContext): void {
     enabledModels = new Set()
     tpsEnabled = true
@@ -149,30 +137,32 @@ export default function piFastExtension(pi: ExtensionAPI): void {
   }
 
   pi.registerCommand("fast", {
-    description: "Toggle Fast Mode for the current model",
+    description: "Toggle Fast Mode for a model",
     handler: async (args, ctx) => {
       if (args.trim()) {
         notify(ctx, "Usage: /fast", "error")
         return
       }
+      if (!ctx.hasUI) return
 
-      const model = ctx.model
-      if (!model) {
-        notify(ctx, "No current model selected.", "error")
-        return
-      }
+      const models = [...FAST_TARGETS].toSorted()
+      const selected = await ctx.ui.select(
+        "Toggle Fast Mode:",
+        models.map(
+          (model) => `${enabledModels.has(model) ? "✓" : " "} ${model}`,
+        ),
+      )
+      if (!selected) return
 
-      const key = modelKey(model)
-      if (!FAST_TARGETS.has(key)) {
-        notify(ctx, `Fast Mode is not supported for ${key}.`, "error")
-        return
-      }
-
-      if (enabledModels.has(key)) enabledModels.delete(key)
-      else enabledModels.add(key)
+      const key = selected.slice(2)
+      const nextEnabledModels = new Set(enabledModels)
+      const enabled = !nextEnabledModels.has(key)
+      if (enabled) nextEnabledModels.add(key)
+      else nextEnabledModels.delete(key)
 
       try {
-        writeConfig(enabledModels, tpsEnabled)
+        writeConfig(nextEnabledModels, tpsEnabled)
+        enabledModels = nextEnabledModels
       } catch (error) {
         notify(
           ctx,
@@ -182,25 +172,12 @@ export default function piFastExtension(pi: ExtensionAPI): void {
         return
       }
 
-      updateFooter(ctx)
-      notify(
-        ctx,
-        enabledModels.has(key) ? "Fast Mode enabled." : "Fast Mode disabled.",
-      )
+      notify(ctx, `Fast Mode ${enabled ? "enabled" : "disabled"} for ${key}.`)
     },
   })
 
   pi.on("session_start", (_event, ctx) => {
     loadConfig(ctx)
-    updateFooter(ctx)
-  })
-
-  pi.on("model_select", (_event, ctx) => {
-    updateFooter(ctx)
-  })
-
-  pi.on("agent_start", (_event, ctx) => {
-    updateFooter(ctx)
   })
 
   pi.on("before_provider_request", (event, ctx) => {
@@ -209,9 +186,5 @@ export default function piFastExtension(pi: ExtensionAPI): void {
     }
 
     return { ...event.payload, service_tier: DEFAULT_SERVICE_TIER }
-  })
-
-  pi.on("session_shutdown", (_event, ctx) => {
-    if (ctx.hasUI) ctx.ui.setStatus("fast-mode", undefined)
   })
 }
