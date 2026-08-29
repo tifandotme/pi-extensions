@@ -15,19 +15,27 @@ export function redactSecrets(text: string): string {
     )
 }
 
-export function sanitizeRenameText(raw: string): string {
-  return raw
-    .trim()
-    .replace(/^```(?:\w+)?/u, "")
-    .replace(/```$/u, "")
-    .replace(/^name\s*:\s*/iu, "")
-    .replace(/^title\s*:\s*/iu, "")
-    .replace(/^[-*•]\s*/u, "")
-    .replace(/["'`]/gu, "")
-    .replace(/[^a-z0-9]+/giu, "-")
-    .replace(/-+/gu, "-")
-    .replace(/^-|-$/gu, "")
-    .toLowerCase()
+export function sanitizeRenameText(raw: string, language = "en"): string {
+  const allowUnicode = !/^en(?:-|$)/iu.test(language)
+  const disallowedCharacters = allowUnicode
+    ? /[^\p{L}\p{M}\p{N}]+/gu
+    : /[^a-z0-9]+/giu
+
+  return Array.from(
+    raw
+      .trim()
+      .replace(/^```(?:\w+)?/u, "")
+      .replace(/```$/u, "")
+      .replace(/^name\s*:\s*/iu, "")
+      .replace(/^title\s*:\s*/iu, "")
+      .replace(/^[-*•]\s*/u, "")
+      .replace(/["'`]/gu, "")
+      .replace(disallowedCharacters, "-")
+      .replace(/-+/gu, "-")
+      .replace(/^-|-$/gu, "")
+      .toLowerCase(),
+  )
     .slice(0, MAX_RENAME_CHARS)
+    .join("")
     .replace(/-$/u, "")
 }

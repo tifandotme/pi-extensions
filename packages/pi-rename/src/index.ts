@@ -12,14 +12,20 @@ import type {
 import { buildSessionContext } from "@earendil-works/pi-coding-agent"
 import { pickRenameModel } from "./model-picker.js"
 import {
-  deleteRenameConfig,
+  DEFAULT_RENAME_LANGUAGE,
+  parseRenameLanguage,
+  type RenameLanguage,
+} from "./language.js"
+import {
+  deleteModelPreference,
   formatAuthModelKey,
   formatModelPreference,
   formatRenameModelKey,
   getAuthenticatedTextModelPreferences,
   getRenameModelAuth,
-  resolveInitialModelConfig,
+  resolveInitialRenameConfig,
   saveModelPreference,
+  saveRenameLanguage,
   type RenameModelConfig,
 } from "./models.js"
 import { isTemporaryHerdrLabel } from "./herdr-label.js"
@@ -32,6 +38,7 @@ interface SessionContextReader {
 
 interface RenameState {
   modelConfig: RenameModelConfig
+  language: RenameLanguage
 }
 
 const RENAME_SUBCOMMANDS: AutocompleteItem[] = [
@@ -55,6 +62,7 @@ const RENAME_SUBCOMMANDS: AutocompleteItem[] = [
 function createRenameState(): RenameState {
   return {
     modelConfig: { kind: "missing" },
+    language: DEFAULT_RENAME_LANGUAGE,
   }
 }
 
@@ -241,7 +249,12 @@ async function runRenameCommand(
     })
   }
   try {
-    const result = await generateRename(ctx, state.modelConfig, context)
+    const result = await generateRename(
+      ctx,
+      state.modelConfig,
+      context,
+      state.language,
+    )
     if (!result) {
       ctx.ui.notify("Could not generate a session name.", "error")
       return
@@ -315,7 +328,7 @@ async function configureRenameModel(
 
   try {
     if (result.action === "default") {
-      deleteRenameConfig()
+      deleteModelPreference()
       state.modelConfig = { kind: "missing" }
       ctx.ui.notify("Rename model reset to default.", "info")
       return
@@ -327,6 +340,28 @@ async function configureRenameModel(
       `Rename model set to ${formatRenameModelKey(result.model)}.`,
       "info",
     )
+  } catch (error) {
+    const reason =
+      error instanceof SyntaxError ? "invalid JSON" : "write failed"
+    ctx.ui.notify(`Could not update rename config: ${reason}.`, "error")
+  }
+}
+
+function configureRenameLanguage(
+  ctx: ExtensionContext,
+  state: RenameState,
+  value: string | undefined,
+): void {
+  const language = parseRenameLanguage(value)
+  if (!language) {
+    ctx.ui.notify("Use /rename config language <auto|BCP-47>", "error")
+    return
+  }
+
+  try {
+    saveRenameLanguage(language)
+    state.language = language
+    ctx.ui.notify(`Rename language set to ${language}.`, "info")
   } catch (error) {
     const reason =
       error instanceof SyntaxError ? "invalid JSON" : "write failed"
@@ -365,6 +400,7 @@ async function notifyRenameStatus(
       "pi-rename status",
       selectedModelLine,
       activeModelLine,
+      `language: ${state.language}`,
       herdrLine,
       contextLine,
     ].join("\n"),
@@ -377,20 +413,22 @@ function registerRenameCommand(pi: ExtensionAPI, state: RenameState): void {
     description: "generate a session name",
     getArgumentCompletions: getRenameArgumentCompletions,
     handler: async (args, ctx) => {
-      const action = args.trim().split(/\s+/u)[0]?.toLowerCase() ?? ""
+      const [action = "", ...actionArgs] = args.trim().split(/\s+/u)
+      const normalizedAction = action.toLowerCase()
 
-      if (!action) {
+      if (!normalizedAction) {
         await runRenameCommand(pi, ctx, state)
         return
       }
 
-      if (action === "help") {
+      if (normalizedAction === "help") {
         ctx.ui.notify(
           [
             "pi-rename commands",
             "/rename - generate and apply a session name",
             "/rename status - show model and rename status",
             "/rename config - choose the rename model",
+            "/rename config language <auto|BCP-47> - set name language",
             "/rename help - show this help",
           ].join("\n"),
           "info",
@@ -398,13 +436,24 @@ function registerRenameCommand(pi: ExtensionAPI, state: RenameState): void {
         return
       }
 
-      if (action === "status") {
+      if (normalizedAction === "status") {
         await notifyRenameStatus(ctx, state)
         return
       }
 
-      if (action === "config") {
-        await configureRenameModel(ctx, state)
+      if (normalizedAction === "config") {
+        const [setting, value, extra] = actionArgs
+        if (!setting) {
+          await configureRenameModel(ctx, state)
+          return
+        }
+
+        if (setting.toLowerCase() === "language" && !extra) {
+          configureRenameLanguage(ctx, state, value)
+          return
+        }
+
+        ctx.ui.notify("Use /rename config language <auto|BCP-47>", "error")
         return
       }
 
@@ -419,7 +468,9 @@ export default function (pi: ExtensionAPI): void {
   registerRenameCommand(pi, state)
 
   pi.on("session_start", async () => {
-    state.modelConfig = resolveInitialModelConfig()
+    const initialConfig = resolveInitialRenameConfig()
+    state.modelConfig = initialConfig.modelConfig
+    state.language = initialConfig.language
 
     const sessionName = pi.getSessionName()?.trim()
     if (!sessionName) return

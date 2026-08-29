@@ -25,6 +25,7 @@ If the rename model is unavailable, `/rename` falls back to a local name from th
 - `/rename`: Generate and apply a session name.
 - `/rename status`: Show model and rename status.
 - `/rename config`: Choose a rename model.
+- `/rename config language <auto|BCP-47>`: Set session-name language.
 - `/rename help`: List rename commands.
 
 Manual names are not supported. Use pi's built-in `/name` command when you want an exact name.
@@ -37,13 +38,25 @@ Run `/rename config` to choose a different model.
 
 After you choose a model, `pi-rename` uses only that model. Choose `Use default` in `/rename config` to return to the default.
 
+To preserve existing behavior, names use ASCII when no language is configured. Set an output language with a BCP 47 tag, or use `auto` to follow latest user message language:
+
+```bash
+/rename config language <BCP-47-tag>
+/rename config language auto
+```
+
+`auto` and non-`en` tags preserve Unicode letters and numbers. If rename model is unavailable, fallback uses latest user message and does not translate it.
+
 You can also edit `$PI_CODING_AGENT_DIR/extensions/pi-rename.json` manually:
 
 ```json
 {
-  "model": "openai-codex/gpt-5.6-luna"
+  "model": "openai-codex/gpt-5.6-luna",
+  "language": "auto"
 }
 ```
+
+Use `"language": "en"` for ASCII compatibility mode. Missing or invalid language values also fall back to `en`.
 
 ## Herdr behavior
 

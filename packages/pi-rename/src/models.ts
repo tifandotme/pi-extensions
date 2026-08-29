@@ -11,6 +11,11 @@ import {
   getAgentDir,
   type ExtensionContext,
 } from "@earendil-works/pi-coding-agent"
+import {
+  DEFAULT_RENAME_LANGUAGE,
+  parseRenameLanguage,
+  type RenameLanguage,
+} from "./language.js"
 
 const CONFIG_PATH = path.join(getAgentDir(), "extensions", "pi-rename.json")
 const CONFIG_DIR = path.dirname(CONFIG_PATH)
@@ -49,6 +54,12 @@ export const DEFAULT_RENAME_MODEL: RenameModelPreference = {
 
 interface RenameConfig extends Record<string, unknown> {
   model?: unknown
+  language?: unknown
+}
+
+export interface InitialRenameConfig {
+  readonly modelConfig: RenameModelConfig
+  readonly language: RenameLanguage
 }
 
 export function formatModelPreference(config: RenameModelConfig): string {
@@ -89,31 +100,76 @@ function readConfig(): RenameConfig {
     : {}
 }
 
-export function saveModelPreference(
-  modelPreference: RenameModelPreference,
-): void {
-  const config: RenameConfig = {
-    model: formatRenameModelKey(modelPreference),
-  }
+function writeConfig(config: RenameConfig): void {
   mkdirSync(CONFIG_DIR, { recursive: true })
   writeFileSync(CONFIG_PATH, `${JSON.stringify(config, null, 2)}\n`, "utf-8")
 }
 
-export function deleteRenameConfig(): void {
-  rmSync(CONFIG_PATH, { force: true })
+function readConfigForUpdate(): RenameConfig {
+  if (!existsSync(CONFIG_PATH)) return {}
+
+  try {
+    return readConfig()
+  } catch (error) {
+    if (error instanceof SyntaxError) return {}
+    throw error
+  }
 }
 
-export function resolveInitialModelConfig(): RenameModelConfig {
-  if (!existsSync(CONFIG_PATH)) return { kind: "missing" }
+function updateConfig(update: Partial<RenameConfig>): void {
+  writeConfig({ ...readConfigForUpdate(), ...update })
+}
+
+export function saveModelPreference(
+  modelPreference: RenameModelPreference,
+): void {
+  updateConfig({ model: formatRenameModelKey(modelPreference) })
+}
+
+export function saveRenameLanguage(language: RenameLanguage): void {
+  updateConfig({ language })
+}
+
+export function deleteModelPreference(): void {
+  if (!existsSync(CONFIG_PATH)) return
+
+  const config = readConfigForUpdate()
+  delete config.model
+  if (Object.keys(config).length === 0) {
+    rmSync(CONFIG_PATH)
+    return
+  }
+
+  writeConfig(config)
+}
+
+function resolveModelConfig(config: RenameConfig): RenameModelConfig {
+  if (config.model === undefined) return { kind: "missing" }
+  if (typeof config.model !== "string") return { kind: "invalid" }
+
+  const model = parseModelSpec(config.model)
+  return model ? { kind: "configured", model } : { kind: "invalid" }
+}
+
+export function resolveInitialRenameConfig(): InitialRenameConfig {
+  if (!existsSync(CONFIG_PATH)) {
+    return {
+      modelConfig: { kind: "missing" },
+      language: DEFAULT_RENAME_LANGUAGE,
+    }
+  }
 
   try {
     const config = readConfig()
-    if (typeof config.model !== "string") return { kind: "invalid" }
-
-    const model = parseModelSpec(config.model)
-    return model ? { kind: "configured", model } : { kind: "invalid" }
+    return {
+      modelConfig: resolveModelConfig(config),
+      language: parseRenameLanguage(config.language) ?? DEFAULT_RENAME_LANGUAGE,
+    }
   } catch {
-    return { kind: "invalid" }
+    return {
+      modelConfig: { kind: "invalid" },
+      language: DEFAULT_RENAME_LANGUAGE,
+    }
   }
 }
 

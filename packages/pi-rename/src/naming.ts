@@ -1,6 +1,7 @@
 import type { AgentMessage } from "@earendil-works/pi-agent-core"
 import type { Message } from "@earendil-works/pi-ai"
 import type { ExtensionContext } from "@earendil-works/pi-coding-agent"
+import type { RenameLanguage } from "./language.js"
 import {
   formatRenameModelKey,
   getRenameModelAuth,
@@ -15,8 +16,26 @@ export const RENAME_SYSTEM_PROMPT = `Name this coding-agent session.
 
 Return one lowercase hyphen-separated session name only.
 Use plain text, no quotes, no markdown, no trailing punctuation.
-Prefer an action-oriented task name like fix-auth-callback or design-pi-rename.
+Prefer an action-oriented task name.
 Stay under 60 characters.`
+
+export function buildRenameSystemPrompt(language: RenameLanguage): string {
+  if (/^en(?:-|$)/iu.test(language)) return RENAME_SYSTEM_PROMPT
+
+  const languageInstruction =
+    language === "auto"
+      ? "Use language of latest user message."
+      : `Use language identified by BCP 47 tag ${language}.`
+
+  return `Name this coding-agent session.
+
+${languageInstruction}
+Return one hyphen-separated session name only.
+Use plain text, no quotes, no markdown, no trailing punctuation.
+Use lowercase when selected language has case.
+Prefer an action-oriented task name.
+Stay under 60 characters.`
+}
 
 export interface UserMessageContext {
   readonly first: string
@@ -109,15 +128,17 @@ function extractModelText(
 
 export function fallbackRenameName(
   context: UserMessageContext,
+  language: RenameLanguage = "en",
 ): string | undefined {
   const latest = context.recent.at(-1) ?? context.first
-  return sanitizeRenameText(latest)
+  return sanitizeRenameText(latest, language)
 }
 
 export async function generateRename(
   ctx: ExtensionContext,
   modelConfig: RenameModelConfig,
   context: UserMessageContext,
+  language: RenameLanguage = "en",
 ): Promise<RenameResult | undefined> {
   try {
     const modelAuth = await getRenameModelAuth(ctx, modelConfig)
@@ -126,7 +147,7 @@ export async function generateRename(
       const response = await ctx.modelRegistry.complete(
         modelAuth.auth.model,
         {
-          systemPrompt: RENAME_SYSTEM_PROMPT,
+          systemPrompt: buildRenameSystemPrompt(language),
           messages: [buildRenamePrompt(context)],
         },
         {
@@ -138,11 +159,14 @@ export async function generateRename(
       )
 
       if (response.stopReason === "stop") {
-        const name = sanitizeRenameText(extractModelText(response.content))
+        const name = sanitizeRenameText(
+          extractModelText(response.content),
+          language,
+        )
         if (name) return { source: "model", name }
       }
 
-      const name = fallbackRenameName(context)
+      const name = fallbackRenameName(context, language)
       return name
         ? {
             source: "fallback",
@@ -152,7 +176,7 @@ export async function generateRename(
         : undefined
     }
 
-    const name = fallbackRenameName(context)
+    const name = fallbackRenameName(context, language)
     if (!name) return undefined
 
     if (modelAuth.status === "invalid-config") {
@@ -172,7 +196,7 @@ export async function generateRename(
       reason: `rename model is not authenticated: ${modelName}`,
     }
   } catch (error) {
-    const name = fallbackRenameName(context)
+    const name = fallbackRenameName(context, language)
     if (!name) return undefined
     const reason = error instanceof Error ? error.message : String(error)
     return { source: "fallback", name, reason }
