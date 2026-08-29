@@ -24,6 +24,13 @@
       "name": "@tifan/pi-copy-response",
       "version": "0.2.6",
     },
+    "packages/pi-fast-mode": {
+      "name": "@tifan/pi-fast-mode",
+      "version": "0.1.0",
+      "peerDependencies": {
+        "@earendil-works/pi-coding-agent": ">=0.84.2",
+      },
+    },
     "packages/pi-fixed-editor": {
       "name": "@tifan/pi-fixed-editor",
       "version": "0.3.0",
@@ -34,7 +41,7 @@
     },
     "packages/pi-handoff": {
       "name": "@tifan/pi-handoff",
-      "version": "1.1.2",
+      "version": "2.0.1",
       "dependencies": {
         "@tifan/pi-rename": "^0.4.2",
       },
@@ -45,7 +52,7 @@
     },
     "packages/pi-mermaid-open": {
       "name": "@tifan/pi-mermaid-open",
-      "version": "0.1.3",
+      "version": "0.2.0",
       "dependencies": {
         "grok-mermaid": "0.2.2",
       },
@@ -55,21 +62,21 @@
     },
     "packages/pi-preferred-thinking": {
       "name": "@tifan/pi-preferred-thinking",
-      "version": "0.3.0",
+      "version": "1.0.1",
       "peerDependencies": {
         "@earendil-works/pi-coding-agent": ">=0.84.2",
       },
     },
     "packages/pi-recap": {
       "name": "@tifan/pi-recap",
-      "version": "0.4.4",
+      "version": "0.4.5",
       "peerDependencies": {
         "@earendil-works/pi-coding-agent": ">=0.84.2",
       },
     },
     "packages/pi-rename": {
       "name": "@tifan/pi-rename",
-      "version": "0.4.2",
+      "version": "0.5.1",
       "peerDependencies": {
         "@earendil-works/pi-coding-agent": ">=0.84.2",
       },
@@ -85,7 +92,7 @@
     },
     "packages/pi-stash": {
       "name": "@tifan/pi-stash",
-      "version": "0.1.0",
+      "version": "0.2.0",
     },
     "packages/pi-titlebar-spinner": {
       "name": "@tifan/pi-titlebar-spinner",
@@ -352,6 +359,8 @@
     "@smithy/util-utf8": ["@smithy/util-utf8@2.3.0", "", { "dependencies": { "@smithy/util-buffer-from": "^2.2.0", "tslib": "^2.6.2" } }, "sha512-R8Rdn8Hy72KKcebgLiv8jQcQkXoLMOGGv5uI1/k0l+snqkOzQ1R0ChUBCxWMlBsFMekWjq0wRudIweFs7sKT5A=="],
 
     "@tifan/pi-copy-response": ["@tifan/pi-copy-response@workspace:packages/pi-copy-response"],
+
+    "@tifan/pi-fast-mode": ["@tifan/pi-fast-mode@workspace:packages/pi-fast-mode"],
 
     "@tifan/pi-fixed-editor": ["@tifan/pi-fixed-editor@workspace:packages/pi-fixed-editor"],
 

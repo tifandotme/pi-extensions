@@ -30,6 +30,18 @@ A tool-assisted lookup against a previous pi `.jsonl` session file.
 
 A pi extension behavior that keeps the editor and footer visible at the bottom of the terminal while the transcript scrolls. It does not change footer content, editor behavior, or autocomplete.
 
+### Response TPS
+
+A speed measure for one assistant response. It uses provider-reported output tokens from the start of the model turn until the assistant message ends. It includes reasoning tokens and response wait time.
+
+### Task TPS
+
+A speed measure for a complete agent task. It includes all assistant responses and the time spent executing tools.
+
+### TTFT
+
+Time to first token: the time from the start of a model turn until the first generated token.
+
 ### Fullscreen TUI mode
 
 Pi's experimental native interactive mode that keeps the transcript in an application-owned scroll region while queued messages, status, widgets, editor, and footer stay fixed at the bottom of the terminal.
