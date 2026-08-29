@@ -1,5 +1,11 @@
 # @tifan/pi-recap
 
+## 0.4.6
+
+### Patch Changes
+
+- [`f0024a8`](https://github.com/tifandotme/pi-extensions/commit/f0024a877993f0ae4872ffc22848d3404084dc76) Thanks [@tifandotme](https://github.com/tifandotme)! - Prevent away-mode recaps after a failed session compaction.
+
 ## 0.4.5
 
 ### Patch Changes
