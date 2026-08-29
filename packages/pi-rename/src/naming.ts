@@ -5,13 +5,17 @@ import type { RenameLanguage } from "./language.js"
 import {
   formatRenameModelKey,
   getRenameModelAuth,
-  resolveInitialModelConfig,
+  resolveInitialRenameConfig,
   type RenameModelConfig,
 } from "./models.js"
 import { redactSecrets, sanitizeRenameText } from "./sanitize.js"
 
 export const RENAME_MAX_TOKENS = 80
 export const RENAME_REQUEST_TIMEOUT_MS = 30_000
+
+export function resolveInitialModelConfig(): RenameModelConfig {
+  return resolveInitialRenameConfig().modelConfig
+}
 
 export const RENAME_SYSTEM_PROMPT = `Name this coding-agent session.
 
@@ -204,4 +208,4 @@ export async function generateRename(
   }
 }
 
-export { redactSecrets, resolveInitialModelConfig, sanitizeRenameText }
+export { redactSecrets, resolveInitialRenameConfig, sanitizeRenameText }
