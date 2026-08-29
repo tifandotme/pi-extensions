@@ -1,5 +1,15 @@
 # @tifan/pi-rename
 
+## 0.6.0
+
+### Minor Changes
+
+- [#33](https://github.com/tifandotme/pi-extensions/pull/33) [`d26bad8`](https://github.com/tifandotme/pi-extensions/commit/d26bad8ade4815c88413b0328443422f91e01b58) Thanks [@22GNUs](https://github.com/22GNUs)! - Add language configuration for generated session names with BCP 47 tags and automatic language detection.
+
+### Patch Changes
+
+- [`8f8b3fd`](https://github.com/tifandotme/pi-extensions/commit/8f8b3fd38989723f4544ded454863ccb449c221a) Thanks [@tifandotme](https://github.com/tifandotme)! - Limit generated session names to 30 characters and document the rename command and Herdr label behavior.
+
 ## 0.5.1
 
 ### Patch Changes
