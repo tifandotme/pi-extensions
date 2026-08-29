@@ -1,6 +1,6 @@
 {
   "name": "@tifan/pi-titlebar-spinner",
-  "version": "0.1.3",
+  "version": "1.0.0",
   "description": "Show a spinner in the Herdr tab title while the agent runs.",
   "keywords": [
     "pi",

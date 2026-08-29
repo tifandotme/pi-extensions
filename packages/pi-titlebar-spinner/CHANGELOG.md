@@ -1,5 +1,11 @@
 # @tifan/pi-titlebar-spinner
 
+## 1.0.0
+
+### Major Changes
+
+- [`74b4e82`](https://github.com/tifandotme/pi-extensions/commit/74b4e82ba4ebae91092730b07e76d50203fa8da5) Thanks [@tifandotme](https://github.com/tifandotme)! - Move spinner updates from the Pi titlebar to the Herdr tab title and pause the spinner during user prompts.
+
 ## 0.1.3
 
 ### Patch Changes
