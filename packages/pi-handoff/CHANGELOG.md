@@ -1,5 +1,16 @@
 # @tifan/pi-handoff
 
+## 2.1.0
+
+### Minor Changes
+
+- [`f79df86`](https://github.com/tifandotme/pi-extensions/commit/f79df86e5cd2f32bcf26202625c4db3b1916191d) Thanks [@tifandotme](https://github.com/tifandotme)! - Use the shared session naming logic to generate descriptive names for handoff sessions.
+
+### Patch Changes
+
+- Updated dependencies [[`d26bad8`](https://github.com/tifandotme/pi-extensions/commit/d26bad8ade4815c88413b0328443422f91e01b58), [`8f8b3fd`](https://github.com/tifandotme/pi-extensions/commit/8f8b3fd38989723f4544ded454863ccb449c221a)]:
+  - @tifan/pi-rename@0.6.0
+
 ## 2.0.1
 
 ### Patch Changes
