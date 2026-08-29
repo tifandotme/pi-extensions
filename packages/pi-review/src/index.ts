@@ -813,6 +813,7 @@ export default function reviewExtension(pi: ExtensionAPI) {
       (item) => item.value === smartDefault,
     )
 
+    /* eslint-disable no-await-in-loop -- menu choices must be handled sequentially */
     while (true) {
       const customInstructionsLabel = reviewCustomInstructions
         ? "Remove custom review instructions"
@@ -937,6 +938,7 @@ export default function reviewExtension(pi: ExtensionAPI) {
           return null
       }
     }
+    /* eslint-enable no-await-in-loop */
   }
 
   /**
@@ -1506,6 +1508,7 @@ export default function reviewExtension(pi: ExtensionAPI) {
         fromSelector = true
       }
 
+      /* eslint-disable no-await-in-loop -- review setup prompts must be handled sequentially */
       while (true) {
         if (!target && fromSelector) {
           target = await showReviewSelector(ctx)
@@ -1546,6 +1549,7 @@ export default function reviewExtension(pi: ExtensionAPI) {
         await executeReview(ctx, target, useFreshSession, { extraInstruction })
         return
       }
+      /* eslint-enable no-await-in-loop */
     },
   })
 
