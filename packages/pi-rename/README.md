@@ -1,6 +1,6 @@
 # @tifan/pi-rename
 
-Generate session names for pi and Herdr.
+Generate short pi session names and rename the current Herdr pane or tab to match.
 
 ## Install
 
@@ -8,17 +8,23 @@ Generate session names for pi and Herdr.
 pi install npm:@tifan/pi-rename
 ```
 
-This package requires Pi 0.84.2 or newer.
+Requires Pi 0.84.2 or newer.
 
-## How it works
+## Usage
 
-Run `/rename` to generate a fresh hyphen-separated session name. The extension applies the name to the pi session and, when pi is running inside Herdr, to the current pane and tab when it is the tab's only pane, or to the current pane in a split tab.
+Run:
 
-When a named session starts or resumes in Herdr, the extension applies the saved pi session name when the target still has its default or temporary startup label.
+```text
+/rename
+```
 
-`/rename` builds naming context from the first user message plus up to three latest user messages. It ignores assistant replies, tool output, and attachments. Before sending context to the rename model, it redacts common secrets.
+The extension:
 
-If the rename model is unavailable, `/rename` falls back to a local name from the latest user message.
+- Builds context from the first user message and up to three latest user messages.
+- Ignores assistant replies, tool output, and attachments.
+- Redacts common secrets before sending context to the model.
+- Creates a lowercase, hyphen-separated name of up to 30 characters.
+- Falls back to the latest user message when the naming model is unavailable.
 
 ## Commands
 
@@ -28,15 +34,17 @@ If the rename model is unavailable, `/rename` falls back to a local name from th
 - `/rename config language <auto|BCP-47>`: Set session-name language.
 - `/rename help`: List rename commands.
 
-Manual names are not supported. Use pi's built-in `/name` command when you want an exact name.
+Use pi's built-in `/name` command when you want to set an exact name.
 
 ## Configuration
 
-Out of the box, `pi-rename` uses this default model: `openai-codex/gpt-5.6-luna`.
+Default model:
 
-Run `/rename config` to choose a different model.
+```text
+openai-codex/gpt-5.6-luna
+```
 
-After you choose a model, `pi-rename` uses only that model. Choose `Use default` in `/rename config` to return to the default.
+Use `/rename config` to choose another model or reset to the default.
 
 To preserve existing behavior, names use ASCII when no language is configured. Set an output language with a BCP 47 tag, or use `auto` to follow latest user message language:
 
@@ -60,22 +68,22 @@ Use `"language": "en"` for ASCII compatibility mode. Missing or invalid language
 
 ## Herdr behavior
 
-Herdr tab renaming requires the `herdr` CLI. If it is unavailable, the extension still renames the pi session.
+- Requires the `herdr` CLI.
+- With one pane, renames both the pane and tab.
+- In a split tab, renames only the current pane.
+- Does not replace custom labels on startup or resume.
+- Replaces default or temporary startup labels.
+- Keeps the last name when pi exits.
 
-The extension uses `HERDR_PANE_ID` to find the current Herdr pane. With one pane in the tab, it renames both the pane and tab. With sibling panes, it renames only the current pane.
-
-On session startup or resume, it does not overwrite custom Herdr labels. It replaces only Herdr's default or temporary startup labels, so saved session names still apply.
-
-If your launcher gives Pi a temporary Herdr label, it must set `HERDR_TEMPORARY_LABEL` before starting Pi. The value must match the label shown in Herdr. In Bash, pass it to Pi inline:
+For temporary launcher labels, set `HERDR_TEMPORARY_LABEL`:
 
 ```bash
 HERDR_TEMPORARY_LABEL="my-project (pi)" pi
 ```
 
-If you do not set this variable, `pi-rename` replaces only Herdr's default label.
-On quit, the target keeps the last session name.
+Without it, only Herdr's default label is replaced.
 
-If pi is not running inside Herdr, only the pi session name is updated.
+Outside Herdr, only the pi session is renamed.
 
 ## Release notes
 

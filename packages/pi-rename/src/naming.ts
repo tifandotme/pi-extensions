@@ -5,6 +5,7 @@ import type { RenameLanguage } from "./language.js"
 import {
   formatRenameModelKey,
   getRenameModelAuth,
+  resolveInitialModelConfig,
   type RenameModelConfig,
 } from "./models.js"
 import { redactSecrets, sanitizeRenameText } from "./sanitize.js"
@@ -16,8 +17,8 @@ export const RENAME_SYSTEM_PROMPT = `Name this coding-agent session.
 
 Return one lowercase hyphen-separated session name only.
 Use plain text, no quotes, no markdown, no trailing punctuation.
-Prefer an action-oriented task name.
-Stay under 60 characters.`
+Prefer an action-oriented task name like fix-auth-callback or design-pi-rename.
+Stay under 30 characters.`
 
 export function buildRenameSystemPrompt(language: RenameLanguage): string {
   if (/^en(?:-|$)/iu.test(language)) return RENAME_SYSTEM_PROMPT
@@ -203,4 +204,4 @@ export async function generateRename(
   }
 }
 
-export { redactSecrets, sanitizeRenameText }
+export { redactSecrets, resolveInitialModelConfig, sanitizeRenameText }

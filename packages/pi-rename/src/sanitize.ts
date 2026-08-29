@@ -1,4 +1,4 @@
-export const MAX_RENAME_CHARS = 60
+export const MAX_RENAME_CHARS = 30
 
 export function redactSecrets(text: string): string {
   return text
