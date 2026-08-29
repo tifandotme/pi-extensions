@@ -1,6 +1,6 @@
 # @tifan/pi-handoff
 
-Start a fresh pi session from a handoff document, and query past sessions for context, decisions, or code changes.
+Start a new pi session from a handoff document. The new session can use the `session_query` tool to look up decisions, files, and next steps from earlier sessions.
 
 ## Install
 
@@ -10,33 +10,54 @@ pi install npm:@tifan/pi-handoff
 
 ## Requirements
 
-Matt Pocock's [`handoff` skill](https://github.com/mattpocock/skills/blob/main/skills/productivity/handoff/SKILL.md) is required:
+Install Matt Pocock's `handoff` skill:
 
 ```bash
 npx skills add https://github.com/mattpocock/skills --global --skill handoff
 ```
 
-## How it works
-
-Submit a prompt containing a standalone `-handoff` marker to generate a handoff document from the current session and automatically start a clean session from it. The marker can appear anywhere in the prompt. The handoff is written under the OS temp directory.
-
-The new session name uses the current session name when available. Otherwise, it uses the next-session focus, sanitized to lowercase, hyphen-separated text under 60 characters.
-
-The handoff includes the previous session path when available, so the next agent can use `session_query` if the handoff omits a detail.
-
 ## Usage
+
+Add a standalone `-handoff` marker to a prompt:
 
 ```text
 fix the auth flow -handoff
 ```
 
-The standalone `-handoff` marker is consumed before the prompt reaches the agent. The text before and after it becomes the next-session focus. A prompt containing only `-handoff` continues the current work.
+The marker is consumed before the prompt reaches the agent.
+
+- Text around the marker becomes the next-session focus.
+- The focus is used in the handoff document.
+- A handoff document is written under the OS temp directory.
+- A new session starts automatically from the document.
+- The previous session path is included when available.
+
+A prompt containing only `-handoff` continues the current work.
+
+## Session naming
+
+`pi-handoff` imports the shared naming code from `@tifan/pi-rename`. Installing pi-handoff installs this dependency automatically, but it does not enable pi-rename's commands.
+
+Handoff uses the same naming logic as `/rename`:
+
+- Uses the first user message and up to three latest user messages.
+- Reads the model from `$PI_CODING_AGENT_DIR/extensions/pi-rename.json`.
+- Uses `openai-codex/gpt-5.6-luna` when no config exists.
+- Produces lowercase, hyphen-separated names of up to 30 characters.
+- Falls back to the latest user message if the naming model is unavailable.
+- Uses `handoff-session` when no usable user text exists.
+
+Install `@tifan/pi-rename` separately only if you want its `/rename` and `/rename config` commands.
 
 ## `session_query`
 
-`session_query`: Answer a question about a previous pi session, given the full path to its `.jsonl` file and the question to ask. It uses the configured `openai-codex/gpt-5.6-luna` model, which must be available and authenticated.
+`session_query` answers questions about a previous pi session:
 
-Pi provides session loading and compaction-aware context reconstruction, but not semantic questions about an arbitrary previous session. `session_query` supplies that model-powered query layer.
+- Reads the previous `.jsonl` session file.
+- Uses the `openai-codex/gpt-5.6-luna` model.
+- Requires that model to be available and authenticated.
+
+Pi provides session loading and compaction-aware context reconstruction. `session_query` provides semantic answers about the previous session.
 
 ## Release notes
 

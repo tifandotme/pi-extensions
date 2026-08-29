@@ -1,6 +1,10 @@
 import type { AgentMessage } from "@earendil-works/pi-agent-core"
 import type { Message } from "@earendil-works/pi-ai/compat"
-import { sanitizeRenameText } from "@tifan/pi-rename/naming"
+import {
+  generateRename,
+  getUserMessageContext,
+  resolveInitialModelConfig,
+} from "@tifan/pi-rename/naming"
 import type {
   ExtensionAPI,
   ExtensionCommandContext,
@@ -75,6 +79,17 @@ async function nextHandoffPath(slug: string): Promise<string> {
   }
 
   throw new Error("Could not allocate a unique handoff file path")
+}
+
+async function generateSessionName(
+  ctx: ExtensionCommandContext,
+  messages: readonly AgentMessage[],
+): Promise<string> {
+  const context = getUserMessageContext(messages)
+  if (!context) return "handoff-session"
+
+  const result = await generateRename(ctx, resolveInitialModelConfig(), context)
+  return result?.name ?? "handoff-session"
 }
 
 function buildNewSessionPrompt(handoffPath: string): string {
@@ -250,9 +265,7 @@ async function runHandoff(
     return
   }
 
-  const sessionName =
-    sanitizeRenameText(ctx.sessionManager.getSessionName() ?? focus) ||
-    "handoff-session"
+  const sessionName = await generateSessionName(ctx, messages)
   const handoffPath = await nextHandoffPath(sessionName)
   const document = buildDocumentWithMetadata({
     generated,
