@@ -100,6 +100,7 @@ interface RecapState {
   visible: boolean
   stale: boolean
   lastRecapCurrent: boolean
+  skipNextAwayRecap: boolean
   abortController: AbortController | undefined
   awayTimer: ReturnType<typeof setTimeout> | undefined
 }
@@ -113,6 +114,7 @@ function createRecapState(): RecapState {
     visible: false,
     stale: false,
     lastRecapCurrent: false,
+    skipNextAwayRecap: false,
     abortController: undefined,
     awayTimer: undefined,
   }
@@ -140,6 +142,7 @@ function resetRecapSession(ctx: ExtensionContext, state: RecapState): void {
   state.visible = false
   state.stale = false
   state.lastRecapCurrent = false
+  state.skipNextAwayRecap = false
   clearAwayTimer(state)
   abortPendingGeneration(state)
   clearWidget(ctx)
@@ -551,13 +554,25 @@ export default function (pi: ExtensionAPI): void {
     state.runId++
     state.stale = false
     state.lastRecapCurrent = false
+    state.skipNextAwayRecap = false
     clearAwayTimer(state)
     abortPendingGeneration(state)
     hideRecap(ctx, state)
     clearNoModelWarning(ctx)
   })
 
+  pi.on("session_compact_failed", (event) => {
+    if (event.willRetry) return
+    state.skipNextAwayRecap = true
+    clearAwayTimer(state)
+  })
+
   pi.on("agent_settled", (_event, ctx) => {
+    if (state.skipNextAwayRecap) {
+      state.skipNextAwayRecap = false
+      return
+    }
+
     state.stale = true
     scheduleAwayRecap(pi, ctx, state)
   })
