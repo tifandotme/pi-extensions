@@ -1,5 +1,13 @@
 # @tifan/pi-handoff
 
+## 2.2.1
+
+### Patch Changes
+
+- [`890ca9c`](https://github.com/tifandotme/pi-extensions/commit/890ca9c502c01d8515aaa0239f4c9d22697c34ee) Thanks [@tifandotme](https://github.com/tifandotme)! - Prefix new handoff session names and Herdr labels with `[handoff] `.
+
+- [`890ca9c`](https://github.com/tifandotme/pi-extensions/commit/890ca9c502c01d8515aaa0239f4c9d22697c34ee) Thanks [@tifandotme](https://github.com/tifandotme)! - Keep the current Herdr tab focused when opening a handoff session in a new tab.
+
 ## 2.2.0
 
 ### Minor Changes
