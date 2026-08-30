@@ -26,6 +26,11 @@ import { join } from "node:path"
 
 const HANDOFF_SKILL_COMMAND = "skill:handoff"
 const HANDOFF_BRIDGE_COMMAND = "__pi-handoff-session"
+export const HANDOFF_SESSION_PREFIX = "[handoff] "
+
+export function formatHandoffSessionName(baseName: string): string {
+  return `${HANDOFF_SESSION_PREFIX}${baseName}`
+}
 
 const HANDOFF_SYSTEM_PROMPT = `You are a context transfer assistant. Generate a handoff markdown document for a fresh coding agent.
 
@@ -170,7 +175,6 @@ async function startHandoffInHerdr(options: {
       options.ctx.cwd,
       "--label",
       options.sessionName,
-      "--focus",
     ],
     { timeout: 5_000 },
   )
@@ -394,8 +398,9 @@ async function runHandoff(
     return
   }
 
-  const sessionName = await generateSessionName(ctx, messages)
-  const handoffPath = await nextHandoffPath(sessionName)
+  const baseSessionName = await generateSessionName(ctx, messages)
+  const sessionName = formatHandoffSessionName(baseSessionName)
+  const handoffPath = await nextHandoffPath(baseSessionName)
   const document = buildDocumentWithMetadata({
     generated,
     focus,

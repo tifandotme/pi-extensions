@@ -30,7 +30,7 @@ The marker is consumed before the prompt reaches the agent.
 - The focus is used in the handoff document.
 - A handoff document is written under the OS temp directory.
 - A new session starts automatically from the document.
-- When Pi runs inside Herdr, the handoff opens in a new focused tab. The current parent session stays available in its original tab.
+- When Pi runs inside Herdr, the handoff opens in a new tab without changing focus. The current parent session stays available in its original tab.
 - The handoff session keeps the parent-session link and selected provider/model when available.
 - Outside Herdr, the current session is replaced.
 
@@ -45,9 +45,12 @@ Handoff uses the same naming logic as `/rename`:
 - Uses the first user message and up to three latest user messages.
 - Reads the model from `$PI_CODING_AGENT_DIR/extensions/pi-rename.json`.
 - Uses `openai-codex/gpt-5.6-luna` when no config exists.
-- Produces lowercase, hyphen-separated names of up to 30 characters.
+- Produces a name such as `[handoff] fix-auth-callback`.
+- Keeps the generated base name under 30 characters before adding the prefix.
 - Falls back to the latest user message if the naming model is unavailable.
-- Uses `handoff-session` when no usable user text exists.
+- Uses `[handoff] handoff-session` when no usable user text exists.
+
+The handoff artifact filename uses the unprefixed base name. If you run `/rename` in the new session, it replaces the complete name and can remove the `[handoff]` prefix.
 
 Install `@tifan/pi-rename` separately only if you want its `/rename` and `/rename config` commands.
 
