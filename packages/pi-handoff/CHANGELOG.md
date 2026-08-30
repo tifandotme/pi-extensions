@@ -1,5 +1,11 @@
 # @tifan/pi-handoff
 
+## 2.2.0
+
+### Minor Changes
+
+- [`84335ef`](https://github.com/tifandotme/pi-extensions/commit/84335efb2ceeaa9ba4430e57122f4a8e3ea264c9) Thanks [@tifandotme](https://github.com/tifandotme)! - Open handoff sessions in a focused Herdr tab while keeping the parent session available, while preserving the existing replacement behavior outside Herdr.
+
 ## 2.1.0
 
 ### Minor Changes
