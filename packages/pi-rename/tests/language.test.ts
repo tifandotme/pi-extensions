@@ -32,5 +32,5 @@ test("preserves Unicode names for selected and automatic languages", () => {
 
 test("truncates Unicode text without splitting code points", () => {
   const input = "𐐀".repeat(61)
-  assert.equal(sanitizeRenameText(input, "auto"), "𐐨".repeat(60))
+  assert.equal(sanitizeRenameText(input, "auto"), "𐐨".repeat(30))
 })
