@@ -1,6 +1,6 @@
 {
   "name": "@tifan/pi-mermaid-open",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Find skipped Mermaid diagrams and show them in a terminal image viewer.",
   "keywords": [
     "diagram",

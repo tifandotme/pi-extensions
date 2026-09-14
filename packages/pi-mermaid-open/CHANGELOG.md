@@ -1,5 +1,11 @@
 # @tifan/pi-mermaid-open
 
+## 0.2.1
+
+### Patch Changes
+
+- [`f8abf2c`](https://github.com/tifandotme/pi-extensions/commit/f8abf2c3c78153d2cc07769a9d8d71186cd670cc) Thanks [@tifandotme](https://github.com/tifandotme)! - Add a video preview for the Mermaid viewer package on pi.dev.
+
 ## 0.2.0
 
 ### Minor Changes

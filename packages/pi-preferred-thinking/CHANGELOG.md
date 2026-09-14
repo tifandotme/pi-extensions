@@ -1,5 +1,11 @@
 # @tifan/pi-preferred-thinking
 
+## 1.0.2
+
+### Patch Changes
+
+- [`02c7708`](https://github.com/tifandotme/pi-extensions/commit/02c770869a7e06470dd0810822c8d4c71384510e) Thanks [@tifandotme](https://github.com/tifandotme)! - Add image previews for the packages in the pi.dev gallery.
+
 ## 1.0.1
 
 ### Patch Changes
