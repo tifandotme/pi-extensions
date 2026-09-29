@@ -86,7 +86,30 @@ const HERDR_PLUGIN_ROOT = path.resolve(
   "..",
   "herdr-plugin",
 )
-const MERMAID_FENCE_PATTERN = /```\s*(mermaid|mmd)\b[^\n]*\n([\s\S]*?)```/gi
+// Fences must open at the start of a line so that inline code spans describing a fence
+// (for example `` ```mermaid ``) are not mistaken for diagram source.
+const MERMAID_FENCE_PATTERN =
+  /^ {0,3}(`{3,})[ \t]*(mermaid|mmd)\b[^\n]*\n([\s\S]*?)^ {0,3}\1[ \t]*$/gim
+
+type MermaidFence = {
+  fenceLanguage: MermaidFenceLanguage
+  source: string
+}
+
+export function extractMermaidFences(text: string): MermaidFence[] {
+  const fences: MermaidFence[] = []
+  for (const match of text.matchAll(MERMAID_FENCE_PATTERN)) {
+    const source = trimOuterBlankLines(match[3] ?? "")
+    if (!source) continue
+    fences.push({
+      fenceLanguage: (
+        match[2] ?? "mermaid"
+      ).toLowerCase() as MermaidFenceLanguage,
+      source,
+    })
+  }
+  return fences
+}
 
 function isTextBlock(value: unknown): value is TextBlock {
   return (
@@ -254,14 +277,8 @@ function discoverDiagrams(
   const diagrams: MermaidDiagram[] = []
 
   assistantMessages.forEach((message, messageIndex) => {
-    const text = getAssistantText(message)
-    for (const match of text.matchAll(MERMAID_FENCE_PATTERN)) {
-      const source = trimOuterBlankLines(match[2] ?? "")
-      if (!source) continue
-
-      const fenceLanguage = (
-        match[1] ?? "mermaid"
-      ).toLowerCase() as MermaidFenceLanguage
+    for (const fence of extractMermaidFences(getAssistantText(message))) {
+      const { source, fenceLanguage } = fence
       const discoveredIndex = diagrams.length + 1
       const diagramType = classifyDiagram(source)
       const label = extractTitle(source) ?? `${diagramType} ${discoveredIndex}`
