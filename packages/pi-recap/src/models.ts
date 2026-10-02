@@ -113,6 +113,48 @@ export function resolveInitialModelConfig(): RecapModelConfig {
   }
 }
 
+async function hasModelApiKey(
+  ctx: ExtensionContext,
+  model: Model<Api>,
+): Promise<boolean> {
+  const registry = ctx.modelRegistry as unknown as {
+    getProviderAuth?: (
+      provider: string,
+    ) => Promise<{ auth?: { apiKey?: string } } | undefined>
+    getApiKeyForProvider?: (provider: string) => Promise<string | undefined>
+    getApiKey?: (model: Model<Api>) => Promise<string | undefined>
+  }
+
+  if (typeof registry.getProviderAuth === "function") {
+    try {
+      const auth = await registry.getProviderAuth(model.provider)
+      if (auth?.auth?.apiKey) return true
+    } catch {
+      // Fall through if getProviderAuth fails
+    }
+  }
+
+  if (typeof registry.getApiKeyForProvider === "function") {
+    try {
+      const apiKey = await registry.getApiKeyForProvider(model.provider)
+      if (apiKey) return true
+    } catch {
+      // Fall through
+    }
+  }
+
+  if (typeof registry.getApiKey === "function") {
+    try {
+      const apiKey = await registry.getApiKey(model)
+      if (apiKey) return true
+    } catch {
+      // Ignore
+    }
+  }
+
+  return false
+}
+
 async function getModelAuth(
   ctx: ExtensionContext,
   modelPreference: RecapModelPreference,
@@ -123,8 +165,8 @@ async function getModelAuth(
   )
   if (!model) return undefined
 
-  const auth = await ctx.modelRegistry.getProviderAuth(model.provider)
-  return auth?.auth.apiKey ? model : undefined
+  const hasAuth = await hasModelApiKey(ctx, model)
+  return hasAuth ? model : undefined
 }
 
 export async function getRecapModelAuth(
@@ -164,8 +206,8 @@ export async function getAuthenticatedTextModelPreferences(
     .filter((model) => model.input.includes("text"))
   const authenticatedModels = await Promise.all(
     models.map(async (model) => {
-      const auth = await ctx.modelRegistry.getProviderAuth(model.provider)
-      return auth?.auth.apiKey ? toModelPreference(model) : undefined
+      const hasAuth = await hasModelApiKey(ctx, model)
+      return hasAuth ? toModelPreference(model) : undefined
     }),
   )
 
