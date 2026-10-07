@@ -1,6 +1,6 @@
 {
   "name": "@tifan/pi-minimal-footer",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Minimal footer with model, usage, and project details for Pi.",
   "keywords": [
     "footer",
