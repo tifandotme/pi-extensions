@@ -1,5 +1,11 @@
 # @tifan/pi-minimal-footer
 
+## 0.2.1
+
+### Patch Changes
+
+- [`c4780ff`](https://github.com/tifandotme/pi-extensions/commit/c4780ffefff4258a92a174cbffefef939d6874ea) Thanks [@tifandotme](https://github.com/tifandotme)! - Add a footer screenshot to the package README.
+
 ## 0.2.0
 
 ### Minor Changes
