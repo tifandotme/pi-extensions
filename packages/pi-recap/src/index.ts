@@ -35,7 +35,9 @@ import {
 } from "./tui.js"
 
 const RECAP_MAX_TOKENS = 160
-const RECAP_REQUEST_TIMEOUT_MS = 4_000
+// opencode.ai-backed models are slow enough that a 4s budget is regularly
+// exceeded even for small sessions.
+const RECAP_REQUEST_TIMEOUT_MS = 30_000
 const AWAY_RECAP_DELAY_MS = 5 * 60 * 1_000
 const RECAP_ENTRY_TYPE = "pi-recap:state"
 
@@ -252,6 +254,35 @@ function buildPrompt(messages: AgentMessage[]): Message {
   }
 }
 
+/**
+ * opencode.ai-backed providers reject requests that omit `x-opencode-session`.
+ * pi adds these headers on its own agent path, but `modelRegistry.complete()`
+ * only forwards `options.headers`, so the extension has to supply them itself.
+ * Without this, every recap against opencode/opencode-go fails with
+ * 400 MissingSessionID and `stopReason: "error"`.
+ */
+function opencodeSessionHeaders(
+  model: { provider: string; baseUrl?: string },
+  sessionId: string,
+): Record<string, string> | undefined {
+  let host: string | undefined
+  if (model.baseUrl) {
+    try {
+      host = new URL(model.baseUrl).hostname
+    } catch {
+      host = undefined
+    }
+  }
+
+  const isOpencode =
+    model.provider === "opencode" ||
+    model.provider === "opencode-go" ||
+    host === "opencode.ai"
+
+  if (!isOpencode) return undefined
+  return { "x-opencode-session": sessionId, "x-opencode-client": "pi" }
+}
+
 async function generateRecap(
   pi: ExtensionAPI,
   ctx: ExtensionContext,
@@ -283,6 +314,11 @@ async function generateRecap(
   abortPendingGeneration(state)
   state.abortController = abortController
 
+  const sessionHeaders = opencodeSessionHeaders(
+    modelAuth.auth,
+    ctx.sessionManager.getSessionId(),
+  )
+
   try {
     const response = await ctx.modelRegistry.complete(
       modelAuth.auth,
@@ -296,6 +332,7 @@ async function generateRecap(
         cacheRetention: "none",
         timeoutMs: RECAP_REQUEST_TIMEOUT_MS,
         signal: abortController.signal,
+        ...(sessionHeaders ? { headers: sessionHeaders } : {}),
       },
     )
 
@@ -303,7 +340,14 @@ async function generateRecap(
     if (response.stopReason !== "stop") {
       if (options.manual) {
         clearWidget(ctx)
-        notifyUser(ctx, "Recap generation failed.", "error")
+        const detail = (response as { errorMessage?: string }).errorMessage
+        notifyUser(
+          ctx,
+          detail
+            ? `Recap generation failed: ${detail}`
+            : "Recap generation failed.",
+          "error",
+        )
       }
       return
     }
@@ -324,10 +368,22 @@ async function generateRecap(
     state.lastRecapCurrent = true
     clearNoModelWarning(ctx)
     showWidget(ctx, recap)
-  } catch {
+  } catch (error) {
+    // A superseded or aborted run must not report a failure in the new context.
+    // `runId` catches `agent_start`/`session_start`, which bump it before
+    // aborting; this run's own signal catches a second generation replacing it
+    // without either firing.
+    if (
+      runId !== state.runId ||
+      !state.sessionActive ||
+      abortController.signal.aborted
+    ) {
+      return
+    }
     if (options.manual) {
       clearWidget(ctx)
-      notifyUser(ctx, "Recap generation failed.", "error")
+      const detail = error instanceof Error ? error.message : String(error)
+      notifyUser(ctx, `Recap generation failed: ${detail}`, "error")
     }
     // Automatic recaps are best-effort. Keep the previous recap on transient failures.
   } finally {
