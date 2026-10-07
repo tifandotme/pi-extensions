@@ -322,25 +322,16 @@ async function generateRecap(
     abortPendingGeneration(state)
     state.abortController = abortController
 
+    const registry = ctx.modelRegistry as unknown as {
+      complete?: (
+        model: unknown,
+        context: unknown,
+        completeOptions: unknown,
+      ) => Promise<AssistantMessage>
+    }
     const completeFn =
-      typeof (
-        ctx.modelRegistry as unknown as {
-          complete?: (
-            model: unknown,
-            context: unknown,
-            completeOptions: unknown,
-          ) => Promise<AssistantMessage>
-        }
-      ).complete === "function"
-        ? (
-            ctx.modelRegistry as unknown as {
-              complete: (
-                model: unknown,
-                context: unknown,
-                completeOptions: unknown,
-              ) => Promise<AssistantMessage>
-            }
-          ).complete.bind(ctx.modelRegistry)
+      typeof registry.complete === "function"
+        ? registry.complete.bind(ctx.modelRegistry)
         : async (
             model: unknown,
             context: unknown,
