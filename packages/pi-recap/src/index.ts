@@ -1,5 +1,5 @@
 import type { AgentMessage } from "@earendil-works/pi-agent-core"
-import type { Message } from "@earendil-works/pi-ai"
+import type { AssistantMessage, Message } from "@earendil-works/pi-ai"
 import type { AutocompleteItem } from "@earendil-works/pi-tui"
 import type {
   ExtensionAPI,
@@ -301,26 +301,54 @@ async function generateRecap(
   if (options.manual) showLoadingWidget(ctx)
 
   const runId = state.runId
-  const modelAuth = await getRecapModelAuth(ctx, state.modelConfig)
-  if (runId !== state.runId || !state.sessionActive) return
-
-  if (modelAuth.status !== "ok") {
-    if (options.manual) clearWidget(ctx)
-    handleMissingRecapModel(ctx, modelAuth, options)
-    return
-  }
-
-  const abortController = new AbortController()
-  abortPendingGeneration(state)
-  state.abortController = abortController
-
-  const sessionHeaders = opencodeSessionHeaders(
-    modelAuth.auth,
-    ctx.sessionManager.getSessionId(),
-  )
+  let abortController: AbortController | undefined
 
   try {
-    const response = await ctx.modelRegistry.complete(
+    const modelAuth = await getRecapModelAuth(ctx, state.modelConfig)
+    if (runId !== state.runId || !state.sessionActive) return
+
+    if (modelAuth.status !== "ok") {
+      if (options.manual) clearWidget(ctx)
+      handleMissingRecapModel(ctx, modelAuth, options)
+      return
+    }
+
+    const sessionHeaders = opencodeSessionHeaders(
+      modelAuth.auth,
+      ctx.sessionManager.getSessionId(),
+    )
+
+    abortController = new AbortController()
+    abortPendingGeneration(state)
+    state.abortController = abortController
+
+    const registry = ctx.modelRegistry as unknown as {
+      complete?: (
+        model: unknown,
+        context: unknown,
+        completeOptions: unknown,
+      ) => Promise<AssistantMessage>
+    }
+    const completeFn =
+      typeof registry.complete === "function"
+        ? registry.complete.bind(ctx.modelRegistry)
+        : async (
+            model: unknown,
+            context: unknown,
+            completeOptions: unknown,
+          ) => {
+            const aiModule = "@oh-my-pi/pi-ai"
+            const { completeSimple } = (await import(aiModule)) as {
+              completeSimple: (
+                model: unknown,
+                context: unknown,
+                completeOptions: unknown,
+              ) => Promise<AssistantMessage>
+            }
+            return await completeSimple(model, context, completeOptions)
+          }
+
+    const response = await completeFn(
       modelAuth.auth,
       {
         systemPrompt: RECAP_SYSTEM_PROMPT,
@@ -376,7 +404,7 @@ async function generateRecap(
     if (
       runId !== state.runId ||
       !state.sessionActive ||
-      abortController.signal.aborted
+      abortController?.signal.aborted
     ) {
       return
     }
@@ -387,7 +415,7 @@ async function generateRecap(
     }
     // Automatic recaps are best-effort. Keep the previous recap on transient failures.
   } finally {
-    if (state.abortController === abortController) {
+    if (abortController && state.abortController === abortController) {
       state.abortController = undefined
     }
   }
@@ -434,7 +462,7 @@ function scheduleAwayRecap(
     state.awayTimer = undefined
     if (!state.sessionActive || !state.stale || !ctx.isIdle()) return
     state.stale = false
-    void generateRecap(pi, ctx, state, { manual: false })
+    void generateRecap(pi, ctx, state, { manual: false }).catch(() => {})
   }, AWAY_RECAP_DELAY_MS)
 }
 
@@ -589,7 +617,7 @@ export default function (pi: ExtensionAPI): void {
 
     if (showRestoredRecap(ctx, state)) return
 
-    void generateRecap(pi, ctx, state, { manual: false })
+    void generateRecap(pi, ctx, state, { manual: false }).catch(() => {})
   })
 
   pi.on("input", (event, ctx) => {
