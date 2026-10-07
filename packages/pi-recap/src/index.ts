@@ -303,11 +303,6 @@ async function generateRecap(
   const runId = state.runId
   let abortController: AbortController | undefined
 
-  const sessionHeaders = opencodeSessionHeaders(
-    modelAuth.auth,
-    ctx.sessionManager.getSessionId(),
-  )
-
   try {
     const modelAuth = await getRecapModelAuth(ctx, state.modelConfig)
     if (runId !== state.runId || !state.sessionActive) return
@@ -317,6 +312,11 @@ async function generateRecap(
       handleMissingRecapModel(ctx, modelAuth, options)
       return
     }
+
+    const sessionHeaders = opencodeSessionHeaders(
+      modelAuth.auth,
+      ctx.sessionManager.getSessionId(),
+    )
 
     abortController = new AbortController()
     abortPendingGeneration(state)
@@ -413,7 +413,7 @@ async function generateRecap(
     if (
       runId !== state.runId ||
       !state.sessionActive ||
-      abortController.signal.aborted
+      abortController?.signal.aborted
     ) {
       return
     }
