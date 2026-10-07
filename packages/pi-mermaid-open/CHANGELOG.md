@@ -1,5 +1,11 @@
 # @tifan/pi-mermaid-open
 
+## 0.2.2
+
+### Patch Changes
+
+- [#42](https://github.com/tifandotme/pi-extensions/pull/42) [`fe2148f`](https://github.com/tifandotme/pi-extensions/commit/fe2148fb15a54a9e442ec61629455f0d9ddbbd1f) Thanks [@butfool](https://github.com/butfool)! - Ignore Mermaid fence text inside inline code spans when `/mermaid-open` scans assistant messages.
+
 ## 0.2.1
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @tifan/pi-recap
 
+## 0.4.8
+
+### Patch Changes
+
+- [#43](https://github.com/tifandotme/pi-extensions/pull/43) [`b100f89`](https://github.com/tifandotme/pi-extensions/commit/b100f895c31ced3060ab6b381d28a230001a6005) Thanks [@batamire](https://github.com/batamire)! - Fix `/recap` failing with "Recap generation failed." on opencode.ai-backed models such as `opencode` and `opencode-go`. Recaps now work against those models, wait longer before timing out, and report the provider's reason when generation fails.
+
+- [#45](https://github.com/tifandotme/pi-extensions/pull/45) [`6fab72f`](https://github.com/tifandotme/pi-extensions/commit/6fab72fa9191474f8d88edc456d20df86beaaa99) Thanks [@riique](https://github.com/riique)! - Prevent unhandled rejection during recap generation and improve compatibility with alternative model registry implementations.
+
 ## 0.4.7
 
 ### Patch Changes

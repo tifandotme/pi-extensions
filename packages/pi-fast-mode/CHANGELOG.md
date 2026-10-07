@@ -1,5 +1,11 @@
 # @tifan/pi-fast-mode
 
+## 0.3.1
+
+### Patch Changes
+
+- [`46e2c3c`](https://github.com/tifandotme/pi-extensions/commit/46e2c3cfdc844aa81ba33558bd2deebbcb5017a5) Thanks [@tifandotme](https://github.com/tifandotme)! - Update the footer integration reference to `@tifan/pi-minimal-footer`.
+
 ## 0.3.0
 
 ### Minor Changes

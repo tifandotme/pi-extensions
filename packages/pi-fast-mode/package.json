@@ -1,6 +1,6 @@
 {
   "name": "@tifan/pi-fast-mode",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Toggle OpenAI Fast Mode globally and track response TPS.",
   "keywords": [
     "fast-mode",
