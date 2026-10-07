@@ -89,7 +89,7 @@ const HERDR_PLUGIN_ROOT = path.resolve(
 // Fences must open at the start of a line so that inline code spans describing a fence
 // (for example `` ```mermaid ``) are not mistaken for diagram source.
 const MERMAID_FENCE_PATTERN =
-  /^ {0,3}(`{3,})[ \t]*(mermaid|mmd)\b[^\n]*\n([\s\S]*?)^ {0,3}\1[ \t]*$/gim
+  /^ {0,3}(`{3,})[ \t]*(mermaid|mmd)\b[^\n]*\n([\s\S]*?)^ {0,3}\1`*[ \t]*\r?$/gim
 
 type MermaidFence = {
   fenceLanguage: MermaidFenceLanguage

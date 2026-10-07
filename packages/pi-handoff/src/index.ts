@@ -18,7 +18,7 @@ import {
   SessionManager,
   sessionEntryToContextMessages,
 } from "@earendil-works/pi-coding-agent"
-import { completeText } from "./complete-text.js"
+import { completeText } from "./complete-text.ts"
 import { existsSync } from "node:fs"
 import { mkdir, readFile, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"

@@ -1,6 +1,6 @@
 {
   "name": "@tifan/pi-handoff",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Transfer pi session context to a new session and query past sessions.",
   "keywords": [
     "handoff",
@@ -20,6 +20,7 @@
   },
   "files": [
     "src/**/*.ts",
+    "!src/**/*.test.ts",
     "README.md",
     "LICENSE"
   ],
@@ -27,6 +28,9 @@
   "publishConfig": {
     "access": "public",
     "provenance": true
+  },
+  "scripts": {
+    "test": "node --experimental-strip-types --test src/index.test.ts"
   },
   "dependencies": {
     "@tifan/pi-rename": "^0.6.0"

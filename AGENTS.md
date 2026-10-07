@@ -63,6 +63,10 @@ bun run format
 
 Fix errors before moving on. Keep typecheck before final format because type errors may need code changes, and formatting should be the last cleanup step.
 
+## Tests
+
+Keep each `*.test.ts` beside the source it tests in `src/`, such as `src/foo.test.ts` beside `src/foo.ts`. Use Node's built-in `node:test` and `node:assert/strict`, and add `node --experimental-strip-types --test src/foo.test.ts` to the package's `test` script. Keep test files out of published `files` patterns.
+
 ## Adding a package
 
 1. Create `packages/pi-<name>/`.

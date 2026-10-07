@@ -1,7 +1,7 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { parseRenameLanguage } from "../src/language.ts"
-import { sanitizeRenameText } from "../src/sanitize.ts"
+import { parseRenameLanguage } from "./language.ts"
+import { sanitizeRenameText } from "./sanitize.ts"
 
 test("accepts auto and canonical BCP 47 language tags", () => {
   assert.equal(parseRenameLanguage("auto"), "auto")

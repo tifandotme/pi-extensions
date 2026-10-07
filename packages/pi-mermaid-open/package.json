@@ -20,6 +20,7 @@
   },
   "files": [
     "src/**/*.ts",
+    "!src/**/*.test.ts",
     "herdr-plugin/**/*",
     "README.md",
     "LICENSE"
@@ -28,6 +29,9 @@
   "publishConfig": {
     "access": "public",
     "provenance": true
+  },
+  "scripts": {
+    "test": "node --experimental-strip-types --test src/index.test.ts src/fences.test.ts"
   },
   "dependencies": {
     "grok-mermaid": "0.2.2"

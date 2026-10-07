@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import test from "node:test"
-import { calculateTps, median } from "./src/tps.ts"
+import { calculateTps, median } from "./tps.ts"
 
 test("calculates response TPS from output tokens and elapsed time", () => {
   assert.equal(calculateTps(120, 1_000, 4_000), 40)

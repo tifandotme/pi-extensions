@@ -15,7 +15,7 @@ import {
   DEFAULT_RENAME_LANGUAGE,
   parseRenameLanguage,
   type RenameLanguage,
-} from "./language.js"
+} from "./language.ts"
 
 const CONFIG_PATH = path.join(getAgentDir(), "extensions", "pi-rename.json")
 const CONFIG_DIR = path.dirname(CONFIG_PATH)

@@ -5,6 +5,7 @@
   ],
   "compilerOptions": {
     "noEmit": true,
+    "allowImportingTsExtensions": true,
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "verbatimModuleSyntax": true,

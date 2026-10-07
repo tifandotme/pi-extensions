@@ -1,7 +1,7 @@
 {
   "name": "@tifan/pi-fast-mode",
-  "version": "0.2.0",
-  "description": "Toggle OpenAI Fast Mode per model and track response TPS.",
+  "version": "0.3.0",
+  "description": "Toggle OpenAI Fast Mode globally and track response TPS.",
   "keywords": [
     "fast-mode",
     "openai",
@@ -20,6 +20,7 @@
   },
   "files": [
     "src/**/*.ts",
+    "!src/**/*.test.ts",
     "README.md",
     "LICENSE"
   ],
@@ -29,10 +30,10 @@
     "provenance": true
   },
   "scripts": {
-    "test": "node --experimental-strip-types tps.test.ts"
+    "test": "node --experimental-strip-types --test src/tps.test.ts src/fast-models.test.ts src/fast-config.test.ts"
   },
   "peerDependencies": {
-    "@earendil-works/pi-coding-agent": ">=0.84.2"
+    "@earendil-works/pi-coding-agent": ">=0.87.1"
   },
   "engines": {
     "node": ">=20"

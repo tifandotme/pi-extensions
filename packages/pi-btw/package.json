@@ -19,6 +19,7 @@
   },
   "files": [
     "src/**/*.ts",
+    "!src/**/*.test.ts",
     "README.md",
     "LICENSE"
   ],
@@ -26,6 +27,9 @@
   "publishConfig": {
     "access": "public",
     "provenance": true
+  },
+  "scripts": {
+    "test": "node --experimental-strip-types --test src/index.test.ts"
   },
   "peerDependencies": {
     "@earendil-works/pi-coding-agent": ">=0.84.4"

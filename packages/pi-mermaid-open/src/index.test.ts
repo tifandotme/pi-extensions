@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { formatNativeStatus, getNativeStatus } from "../src/index.ts"
+import { formatNativeStatus, getNativeStatus } from "./index.ts"
 
 test("marks a fitting supported Mermaid diagram as rendered", () => {
   const status = getNativeStatus("flowchart LR\n  A --> B", "mermaid", {

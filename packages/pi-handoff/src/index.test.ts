@@ -1,9 +1,6 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import {
-  formatHandoffSessionName,
-  startHerdrAgentWithRetry,
-} from "../src/index.ts"
+import { formatHandoffSessionName, startHerdrAgentWithRetry } from "./index.ts"
 
 test("prefixes generated handoff names", () => {
   assert.equal(

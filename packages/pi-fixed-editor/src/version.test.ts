@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { getPiSupport } from "../src/version.ts"
+import { getPiSupport } from "./version.ts"
 
 test("selects legacy, upgrade, and native Pi support", () => {
   assert.equal(getPiSupport("0.83.9"), "legacy")

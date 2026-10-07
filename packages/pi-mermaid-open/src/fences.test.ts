@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { extractMermaidFences } from "../src/index.ts"
+import { extractMermaidFences } from "./index.ts"
 
 test("ignores an inline code span that mentions a fence", () => {
   const text = [
@@ -51,6 +51,13 @@ test("matches indented and longer fences", () => {
   assert.deepEqual(extractMermaidFences(text), [
     { fenceLanguage: "mermaid", source: "   flowchart LR\n     A --> B" },
   ])
+})
+
+test("accepts longer closing fences and Windows line endings", () => {
+  assert.deepEqual(
+    extractMermaidFences("```mermaid\r\nflowchart TD\r\n  A --> B\r\n````\r\n"),
+    [{ fenceLanguage: "mermaid", source: "flowchart TD\n  A --> B" }],
+  )
 })
 
 test("collects every fence in message order", () => {

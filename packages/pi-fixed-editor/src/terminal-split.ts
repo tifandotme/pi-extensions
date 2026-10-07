@@ -6,7 +6,7 @@ import {
   visibleWidth,
 } from "@earendil-works/pi-tui"
 import type { Component } from "@earendil-works/pi-tui"
-import type { FixedEditorClusterRender } from "./cluster.js"
+import type { FixedEditorClusterRender } from "./cluster.ts"
 
 export interface TerminalLike {
   columns: number

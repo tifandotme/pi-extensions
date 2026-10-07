@@ -1,6 +1,6 @@
 # @tifan/pi-fast-mode
 
-Toggle OpenAI Fast Mode per model and track response TPS.
+Toggle OpenAI Fast Mode globally and track response TPS.
 
 ## Install
 
@@ -10,9 +10,11 @@ pi install npm:@tifan/pi-fast-mode
 
 ## Usage
 
-Run `/fast` to open the list of supported models. Select a model to toggle Fast Mode. Enabled models are marked `✓`. The setting is saved per exact `provider/model` pair.
+Run `/fast` or press the configured shortcut to toggle Fast Mode globally. The shortcut defaults to Amp's `speed.toggleFast` keybinding. When that setting is empty or missing, the shortcut defaults to `alt+r`.
 
-Run `/tps` to toggle response TPS. The setting is saved in the same configuration file.
+Fast Mode adds `service_tier: "priority"` to requests from supported `openai` and `openai-codex` models while enabled. When paired with `@tifan/pi-minimal-footer`, the active model shows a `↯` marker.
+
+Run `/tps` to toggle response TPS.
 
 When TPS is enabled, the status shows the latest response rate, median response rate, and median time to first token:
 
@@ -22,29 +24,23 @@ last 58 t/s · med 44 t/s | 2.1s ttft
 
 Response TPS uses Pi's provider-reported output tokens divided by the time from turn start to assistant message end. It includes reasoning tokens and response wait time. It does not include time spent executing tools.
 
-Fast Mode adds `service_tier: "priority"` for these exact models:
-
-```text
-openai/gpt-5.4             openai-codex/gpt-5.4
-openai/gpt-5.5             openai-codex/gpt-5.5
-openai/gpt-5.6             openai-codex/gpt-5.6
-openai/gpt-5.6-sol         openai-codex/gpt-5.6-sol
-openai/gpt-5.6-terra       openai-codex/gpt-5.6-terra
-openai/gpt-5.6-luna        openai-codex/gpt-5.6-luna
-```
-
 ## Configuration
 
 Preferences are stored at `$PI_CODING_AGENT_DIR/extensions/pi-fast-mode.json`:
 
 ```json
 {
-  "models": ["openai-codex/gpt-5.6-luna"],
+  "enabled": false,
+  "toggleFast": "",
   "tpsEnabled": true
 }
 ```
 
-`tpsEnabled` defaults to `true` when it is missing. Unsupported models cannot be enabled.
+A non-empty `toggleFast` value overrides Amp's keybinding. Pi key syntax uses `alt+r`; the Amp-style spelling `opt-r` also works. If both settings are empty, Fast Mode uses `alt+r`.
+
+Pi reads Amp's keybinding from `amp.keymap["speed.toggleFast"]` in `~/.config/amp/settings.json`.
+
+`tpsEnabled` defaults to `true`. Legacy `models` settings migrate to global mode based on whether the list was empty.
 
 ## Release notes
 

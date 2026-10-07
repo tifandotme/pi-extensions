@@ -1,14 +1,14 @@
 import type { AgentMessage } from "@earendil-works/pi-agent-core"
 import type { Message } from "@earendil-works/pi-ai"
 import type { ExtensionContext } from "@earendil-works/pi-coding-agent"
-import type { RenameLanguage } from "./language.js"
+import type { RenameLanguage } from "./language.ts"
 import {
   formatRenameModelKey,
   getRenameModelAuth,
   resolveInitialRenameConfig,
   type RenameModelConfig,
-} from "./models.js"
-import { redactSecrets, sanitizeRenameText } from "./sanitize.js"
+} from "./models.ts"
+import { redactSecrets, sanitizeRenameText } from "./sanitize.ts"
 
 export const RENAME_MAX_TOKENS = 80
 export const RENAME_REQUEST_TIMEOUT_MS = 30_000

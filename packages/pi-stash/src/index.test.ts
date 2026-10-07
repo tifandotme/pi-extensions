@@ -6,7 +6,7 @@ import {
   getShortcutAction,
   shouldAutoRestore,
   STASH_ENTRY_TYPE,
-} from "../src/index.js"
+} from "./index.ts"
 
 test("maps Ctrl+S to one-slot stash actions without losing text", () => {
   assert.deepEqual(getShortcutAction("draft A", null), {

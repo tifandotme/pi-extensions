@@ -16,7 +16,7 @@ const agentDir = mkdtempSync(path.join(tmpdir(), "pi-rename-models-"))
 process.env["PI_CODING_AGENT_DIR"] = agentDir
 
 const { deleteModelPreference, saveModelPreference } =
-  await import("../src/models.ts")
+  await import("./models.ts")
 
 after(() => {
   if (originalAgentDir === undefined) {

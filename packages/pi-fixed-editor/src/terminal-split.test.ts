@@ -1,7 +1,11 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { type Component, type Terminal, TUI } from "@earendil-works/pi-tui"
-import type { FixedEditorClusterRender } from "../src/cluster.ts"
+import {
+  type Component,
+  type Terminal,
+  TuiMainScreen,
+} from "@earendil-works/pi-tui"
+import type { FixedEditorClusterRender } from "./cluster.ts"
 import {
   beginSynchronizedOutput,
   buildFixedClusterPaint,
@@ -11,7 +15,7 @@ import {
   setScrollRegion,
   TerminalSplitCompositor,
   type TerminalLike,
-} from "../src/terminal-split.ts"
+} from "./terminal-split.ts"
 
 function countOccurrences(value: string, search: string): number {
   return value.split(search).length - 1
@@ -428,18 +432,26 @@ test("deletes Kitty images when rendering after scrolling", () => {
     render: () => rootLines,
     invalidate: () => {},
   }
-  const tui = new TUI(terminal)
+  const tui = new TuiMainScreen(terminal)
   tui.addChild(root)
+  const inputListener: {
+    current:
+      | ((data: string) => { consume?: boolean; data?: string } | undefined)
+      | undefined
+  } = { current: undefined }
+  const addInputListener = tui.addInputListener.bind(tui)
+  tui.addInputListener = (listener) => {
+    inputListener.current = listener
+    return addInputListener(listener)
+  }
   const compositor = new TerminalSplitCompositor({
     tui: tui as unknown as { children: Component[] },
     terminal,
     renderCluster: () => ({ lines: ["editor", "footer"], cursor: null }),
   })
-  const handleInput = Reflect.get(tui, "handleInput")
-  assert.equal(typeof handleInput, "function")
-
   compositor.install()
   try {
+    assert.equal(typeof inputListener.current, "function")
     assert.ok(writes.join("").includes("\x1b[?1049h"))
     writes.length = 0
     Reflect.get(tui, "doRender").call(tui)
@@ -449,13 +461,13 @@ test("deletes Kitty images when rendering after scrolling", () => {
     }
     writes.length = 0
 
-    handleInput.call(tui, "\x1b[5~")
+    inputListener.current?.("\x1b[5~")
     assert.equal(writes.length, 0)
     assert.equal(scheduledRenders, 1)
     Reflect.get(tui, "doRender").call(tui)
     writes.length = 0
 
-    handleInput.call(tui, "\x1b[6~")
+    inputListener.current?.("\x1b[6~")
     Reflect.get(tui, "doRender").call(tui)
 
     assert.match(
@@ -468,9 +480,9 @@ test("deletes Kitty images when rendering after scrolling", () => {
 })
 
 test("rapid scrolling defers full transcript rendering", () => {
-  let inputListener:
-    | ((data: string) => { consume?: boolean } | undefined)
-    | null = null
+  const inputListener: {
+    current: ((data: string) => { consume?: boolean } | undefined) | null
+  } = { current: null }
   let synchronousRenders = 0
   let renderRequests = 0
   const rootLines = Array.from({ length: 1000 }, (_, index) => `line ${index}`)
@@ -492,9 +504,9 @@ test("rapid scrolling defers full transcript rendering", () => {
     addInputListener: (
       listener: (data: string) => { consume?: boolean } | undefined,
     ) => {
-      inputListener = listener
+      inputListener.current = listener
       return () => {
-        inputListener = null
+        inputListener.current = null
       }
     },
     hasOverlay: () => false,
@@ -508,10 +520,11 @@ test("rapid scrolling defers full transcript rendering", () => {
   compositor.install()
   try {
     tui.render()
-    assert.ok(inputListener)
+    const listener = inputListener.current
+    assert.ok(listener)
 
     for (let index = 0; index < 100; index++) {
-      inputListener("\x1b[<64;1;1M")
+      listener("\x1b[<64;1;1M")
     }
 
     assert.equal(synchronousRenders, 0)
@@ -522,9 +535,9 @@ test("rapid scrolling defers full transcript rendering", () => {
 })
 
 test("plain enter scrolls the transcript back to the bottom", () => {
-  let inputListener:
-    | ((data: string) => { consume?: boolean } | undefined)
-    | null = null
+  const inputListener: {
+    current: ((data: string) => { consume?: boolean } | undefined) | null
+  } = { current: null }
   let renderRequests = 0
   const rootLines = Array.from({ length: 10 }, (_, index) => `line ${index}`)
   const terminal: TerminalLike = {
@@ -541,9 +554,9 @@ test("plain enter scrolls the transcript back to the bottom", () => {
     addInputListener: (
       listener: (data: string) => { consume?: boolean } | undefined,
     ) => {
-      inputListener = listener
+      inputListener.current = listener
       return () => {
-        inputListener = null
+        inputListener.current = null
       }
     },
     hasOverlay: () => false,
@@ -556,12 +569,13 @@ test("plain enter scrolls the transcript back to the bottom", () => {
 
   compositor.install()
   try {
-    assert.ok(inputListener)
-    assert.equal(inputListener("\x1b[5~")?.consume, true)
+    const listener = inputListener.current
+    assert.ok(listener)
+    assert.equal(listener("\x1b[5~")?.consume, true)
     assert.deepEqual(tui.render(), ["line 0", "line 1", "line 2", "line 3"])
     renderRequests = 0
 
-    assert.equal(inputListener("\r"), undefined)
+    assert.equal(listener("\r"), undefined)
 
     assert.deepEqual(tui.render(), ["line 6", "line 7", "line 8", "line 9"])
     assert.equal(renderRequests, 1)

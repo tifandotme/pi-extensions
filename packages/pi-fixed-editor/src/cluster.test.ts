@@ -1,7 +1,7 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
 import { CURSOR_MARKER } from "@earendil-works/pi-tui"
-import { renderFixedEditorCluster } from "../src/cluster.ts"
+import { renderFixedEditorCluster } from "./cluster.ts"
 
 test("renders the fixed input cluster in Pi order", () => {
   const result = renderFixedEditorCluster({

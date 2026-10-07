@@ -1,22 +1,22 @@
 {
-  "name": "@tifan/pi-fixed-editor",
-  "version": "0.3.0",
-  "description": "Legacy fixed editor for Pi versions before 0.84.",
+  "name": "@tifan/pi-minimal-footer",
+  "version": "0.1.0",
+  "description": "Minimal footer with model, usage, and project details for Pi.",
   "keywords": [
-    "fixed-editor",
+    "footer",
+    "minimal-ui",
     "pi",
     "pi-extension",
-    "pi-package",
-    "terminal"
+    "pi-package"
   ],
-  "homepage": "https://github.com/tifandotme/pi-extensions/tree/master/packages/pi-fixed-editor#readme",
+  "homepage": "https://github.com/tifandotme/pi-extensions/tree/master/packages/pi-minimal-footer#readme",
   "bugs": "https://github.com/tifandotme/pi-extensions/issues",
   "license": "MIT",
   "author": "Tifan Dwi Avianto <hi@tifan.me>",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tifandotme/pi-extensions.git",
-    "directory": "packages/pi-fixed-editor"
+    "directory": "packages/pi-minimal-footer"
   },
   "files": [
     "src/**/*.ts",
@@ -30,11 +30,11 @@
     "provenance": true
   },
   "scripts": {
-    "test": "node --experimental-strip-types --test src/cluster.test.ts src/terminal-split.test.ts src/version.test.ts"
+    "test": "node --experimental-strip-types --test src/editor-border.test.ts src/footer-stats.test.ts"
   },
   "peerDependencies": {
-    "@earendil-works/pi-coding-agent": ">=0.78.0",
-    "@earendil-works/pi-tui": ">=0.78.0"
+    "@earendil-works/pi-coding-agent": ">=0.84.2",
+    "@earendil-works/pi-tui": ">=0.84.2"
   },
   "engines": {
     "node": ">=20"

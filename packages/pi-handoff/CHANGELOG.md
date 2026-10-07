@@ -1,5 +1,13 @@
 # @tifan/pi-handoff
 
+## 2.2.2
+
+### Patch Changes
+
+- [`34b2ea9`](https://github.com/tifandotme/pi-extensions/commit/34b2ea984ba0586c72c894388c798fb6206f9710) Thanks [@tifandotme](https://github.com/tifandotme)! - Retry starting handoff sessions while their new Herdr pane becomes ready.
+
+- [`7201f33`](https://github.com/tifandotme/pi-extensions/commit/7201f331577df8f0f8be1e8c03afc5aed7d01174) Thanks [@tifandotme](https://github.com/tifandotme)! - Retry opening a handoff in Herdr when the target pane is temporarily busy.
+
 ## 2.2.1
 
 ### Patch Changes
