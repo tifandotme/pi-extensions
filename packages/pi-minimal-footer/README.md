@@ -14,6 +14,8 @@ The top editor border keeps Pi's working-status loader on the left and shows the
 
 Extension statuses are hidden by default. Run `/toggle-extension-status` to show the usual extension status row. Run it again to hide the row.
 
+![Minimal footer showing model, usage, working directory, and Git branch](https://raw.githubusercontent.com/tifandotme/pi-extensions/refs/heads/master/packages/pi-minimal-footer/assets/footer.webp)
+
 ## License
 
 [MIT](https://github.com/tifandotme/pi-extensions/blob/master/LICENSE)
