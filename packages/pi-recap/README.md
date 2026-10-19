@@ -32,6 +32,9 @@ A good recap should answer "what was I trying to do here?". For example:
 - `/recap`: Generate and show a fresh recap.
 - `/recap status`: Show the selected model, active model, recap freshness, and whether the recap is visible. A recap is current when it still matches the latest session state; otherwise it is stale.
 - `/recap config`: Choose a recap model.
+- `/recap color <name>`: Set the recap color. Choices are `accent`, `success`, `warning`, `error`, `text`, `mdLink`, `mdHeading`, `toolTitle`, `muted`, `dim`, or `default`.
+- `/recap spacing on|off`: Show or hide a blank line above the recap.
+- `/recap persist on|off`: Keep the recap visible until your next message (`on`) or clear it as soon as the agent starts working again (`off`).
 - `/recap help`: List recap commands.
 
 ## Configuration
@@ -43,6 +46,8 @@ Run `/recap config` to choose a different model.
 ![Recap model selector showing available model choices](https://raw.githubusercontent.com/tifandotme/pi-extensions/refs/heads/master/packages/pi-recap/assets/recap-model-selector.webp)
 
 After you choose a model, `pi-recap` uses only that model. Choose `Use default` in `/recap config` to return to the default.
+
+Display options are saved alongside the model in `pi-recap.json`. Defaults match the original behavior: color `muted`, spacing off, persist off. Set `/recap color accent`, `/recap spacing on`, and `/recap persist on` for a more prominent, longer-lived recap.
 
 You can also edit `$PI_CODING_AGENT_DIR/extensions/pi-recap.json` manually:
 

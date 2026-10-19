@@ -19,8 +19,14 @@ import {
   formatRecapModelKey,
   getAuthenticatedTextModelPreferences,
   getRecapModelAuth,
+  isRecapColor,
+  DEFAULT_RECAP_DISPLAY,
+  RECAP_COLORS,
+  resolveDisplaySettings,
   resolveInitialModelConfig,
+  saveDisplaySetting,
   saveModelPreference,
+  type RecapDisplaySettings,
   type RecapModelConfig,
   type ResolvedRecapModelAuth,
 } from "./models.js"
@@ -76,6 +82,21 @@ const RECAP_SUBCOMMANDS: AutocompleteItem[] = [
     description: "Choose the recap model",
   },
   {
+    value: "color",
+    label: "color",
+    description: `Set recap color (${RECAP_COLORS.join(", ")}, default)`,
+  },
+  {
+    value: "spacing",
+    label: "spacing",
+    description: "Blank line above the recap (on, off)",
+  },
+  {
+    value: "persist",
+    label: "persist",
+    description: "Keep recap until your next message (on, off)",
+  },
+  {
     value: "help",
     label: "help",
     description: "List recap commands",
@@ -98,6 +119,7 @@ interface RecapState {
   sessionActive: boolean
   runId: number
   modelConfig: RecapModelConfig
+  display: RecapDisplaySettings
   lastRecap: string
   visible: boolean
   stale: boolean
@@ -112,6 +134,7 @@ function createRecapState(): RecapState {
     sessionActive: false,
     runId: 0,
     modelConfig: { kind: "missing" },
+    display: resolveDisplaySettings(),
     lastRecap: "",
     visible: false,
     stale: false,
@@ -198,7 +221,10 @@ function showRestoredRecap(ctx: ExtensionContext, state: RecapState): boolean {
   if (!state.lastRecap || !state.lastRecapCurrent) return false
 
   state.visible = true
-  showWidget(ctx, state.lastRecap)
+  showWidget(ctx, state.lastRecap, {
+    color: state.display.color,
+    blankLineAbove: state.display.blankLineAbove,
+  })
   return true
 }
 
@@ -395,7 +421,10 @@ async function generateRecap(
     persistRecapState(pi, state, contextLeafId)
     state.lastRecapCurrent = true
     clearNoModelWarning(ctx)
-    showWidget(ctx, recap)
+    showWidget(ctx, recap, {
+      color: state.display.color,
+      blankLineAbove: state.display.blankLineAbove,
+    })
   } catch (error) {
     // A superseded or aborted run must not report a failure in the new context.
     // `runId` catches `agent_start`/`session_start`, which bump it before
@@ -522,7 +551,9 @@ function registerRecapCommand(pi: ExtensionAPI, state: RecapState): void {
     description: "generate a one-line session recap",
     getArgumentCompletions: getRecapArgumentCompletions,
     handler: async (args, ctx) => {
-      const action = args.trim().split(/\s+/u)[0]?.toLowerCase() ?? ""
+      const tokens = args.trim().split(/\s+/u).filter(Boolean)
+      const action = tokens[0]?.toLowerCase() ?? ""
+      const value = tokens[1]?.toLowerCase() ?? ""
 
       clearAwayTimer(state)
 
@@ -539,6 +570,9 @@ function registerRecapCommand(pi: ExtensionAPI, state: RecapState): void {
             "/recap - generate and show a fresh recap",
             "/recap status - show model and recap status",
             "/recap config - choose the recap model",
+            `/recap color <name> - set color (${RECAP_COLORS.join(", ")}, default)`,
+            "/recap spacing on|off - blank line above the recap",
+            "/recap persist on|off - keep recap until your next message",
             "/recap help - show this help",
           ].join("\n"),
           "info",
@@ -556,8 +590,112 @@ function registerRecapCommand(pi: ExtensionAPI, state: RecapState): void {
         return
       }
 
-      notifyUser(ctx, "Use /recap [config|help|status]", "error")
+      if (action === "color") {
+        setRecapColor(ctx, state, value)
+        return
+      }
+
+      if (action === "spacing") {
+        setRecapToggle(ctx, state, "blankLineAbove", value, "spacing")
+        return
+      }
+
+      if (action === "persist") {
+        setRecapToggle(ctx, state, "persist", value, "persist")
+        return
+      }
+
+      notifyUser(
+        ctx,
+        "Use /recap [config|color|spacing|persist|help|status]",
+        "error",
+      )
     },
+  })
+}
+
+function parseToggle(value: string): boolean | undefined {
+  if (value === "on" || value === "true" || value === "yes") return true
+  if (value === "off" || value === "false" || value === "no") return false
+  return undefined
+}
+
+function setRecapColor(
+  ctx: ExtensionContext,
+  state: RecapState,
+  value: string,
+): void {
+  if (!value) {
+    notifyUser(
+      ctx,
+      `Current color: ${state.display.color}. Use /recap color <${RECAP_COLORS.join("|")}|default>.`,
+      "info",
+    )
+    return
+  }
+
+  if (value === "default") {
+    state.display = { ...state.display, color: DEFAULT_RECAP_DISPLAY.color }
+    saveDisplaySetting("color", undefined)
+    reshowRecap(ctx, state)
+    notifyUser(
+      ctx,
+      `Recap color reset to ${DEFAULT_RECAP_DISPLAY.color}.`,
+      "info",
+    )
+    return
+  }
+
+  if (!isRecapColor(value)) {
+    notifyUser(
+      ctx,
+      `Unknown color "${value}". Choose from: ${RECAP_COLORS.join(", ")}, default.`,
+      "error",
+    )
+    return
+  }
+
+  state.display = { ...state.display, color: value }
+  saveDisplaySetting("color", value)
+  reshowRecap(ctx, state)
+  notifyUser(ctx, `Recap color set to ${value}.`, "info")
+}
+
+function setRecapToggle(
+  ctx: ExtensionContext,
+  state: RecapState,
+  key: "blankLineAbove" | "persist",
+  value: string,
+  label: string,
+): void {
+  if (!value) {
+    const current = state.display[key] ? "on" : "off"
+    notifyUser(
+      ctx,
+      `${label} is ${current}. Use /recap ${label} on|off.`,
+      "info",
+    )
+    return
+  }
+
+  const parsed = parseToggle(value)
+  if (parsed === undefined) {
+    notifyUser(ctx, `Use /recap ${label} on|off.`, "error")
+    return
+  }
+
+  state.display = { ...state.display, [key]: parsed }
+  saveDisplaySetting(key, parsed)
+  if (key === "blankLineAbove") reshowRecap(ctx, state)
+  notifyUser(ctx, `${label} ${parsed ? "on" : "off"}.`, "info")
+}
+
+// Re-render a currently visible recap so a display change applies immediately.
+function reshowRecap(ctx: ExtensionContext, state: RecapState): void {
+  if (!state.visible || !state.lastRecap) return
+  showWidget(ctx, state.lastRecap, {
+    color: state.display.color,
+    blankLineAbove: state.display.blankLineAbove,
   })
 }
 
@@ -591,6 +729,9 @@ async function notifyRecapStatus(
     : "none"
   const lastRecapLine = `last recap: ${lastRecapStatus}`
   const visibleLine = `visible: ${state.visible ? "yes" : "no"}`
+  const colorLine = `color: ${state.display.color}`
+  const spacingLine = `spacing: ${state.display.blankLineAbove ? "on" : "off"}`
+  const persistLine = `persist: ${state.display.persist ? "on" : "off"}`
   notifyUser(
     ctx,
     [
@@ -599,6 +740,9 @@ async function notifyRecapStatus(
       activeModelLine,
       lastRecapLine,
       visibleLine,
+      colorLine,
+      spacingLine,
+      persistLine,
     ].join("\n"),
     "info",
   )
@@ -612,6 +756,7 @@ export default function (pi: ExtensionAPI): void {
   pi.on("session_start", (_event, ctx) => {
     state.sessionActive = true
     state.modelConfig = resolveInitialModelConfig()
+    state.display = resolveDisplaySettings()
     resetRecapSession(ctx, state)
     restoreRecapState(ctx, state)
 
@@ -637,11 +782,16 @@ export default function (pi: ExtensionAPI): void {
   pi.on("agent_start", (_event, ctx) => {
     state.runId++
     state.stale = false
-    state.lastRecapCurrent = false
     state.skipNextAwayRecap = false
     clearAwayTimer(state)
     abortPendingGeneration(state)
-    hideRecap(ctx, state)
+    // When persist is on, a visible recap stays until the next genuine user
+    // message (handled in the "input" event), not until the next agent activity
+    // of any kind. When off, restore the original behavior and hide it here.
+    if (!state.display.persist) {
+      state.lastRecapCurrent = false
+      hideRecap(ctx, state)
+    }
     clearNoModelWarning(ctx)
   })
 

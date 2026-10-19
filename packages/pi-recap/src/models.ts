@@ -45,6 +45,42 @@ export const DEFAULT_RECAP_MODEL: RecapModelPreference = {
 
 interface RecapConfig extends Record<string, unknown> {
   model?: unknown
+  color?: unknown
+  blankLineAbove?: unknown
+  persist?: unknown
+}
+
+export interface RecapDisplaySettings {
+  readonly color: string
+  readonly blankLineAbove: boolean
+  readonly persist: boolean
+}
+
+// Colors are theme foreground keys. This allowlist keeps the recap readable
+// across themes while offering prominent and subtle choices.
+export const RECAP_COLORS = [
+  "accent",
+  "success",
+  "warning",
+  "error",
+  "text",
+  "mdLink",
+  "mdHeading",
+  "toolTitle",
+  "muted",
+  "dim",
+] as const
+
+export type RecapColor = (typeof RECAP_COLORS)[number]
+
+export const DEFAULT_RECAP_DISPLAY: RecapDisplaySettings = {
+  color: "muted",
+  blankLineAbove: false,
+  persist: false,
+}
+
+export function isRecapColor(value: string): value is RecapColor {
+  return (RECAP_COLORS as readonly string[]).includes(value)
 }
 
 export function formatModelPreference(config: RecapModelConfig): string {
@@ -85,18 +121,74 @@ function readConfig(): RecapConfig {
     : {}
 }
 
+function readConfigSafe(): RecapConfig {
+  if (!existsSync(CONFIG_PATH)) return {}
+  try {
+    return readConfig()
+  } catch {
+    return {}
+  }
+}
+
+function writeConfig(config: RecapConfig): void {
+  const entries = Object.entries(config).filter(
+    ([, value]) => value !== undefined,
+  )
+  if (entries.length === 0) {
+    rmSync(CONFIG_PATH, { force: true })
+    return
+  }
+  mkdirSync(CONFIG_DIR, { recursive: true })
+  writeFileSync(
+    CONFIG_PATH,
+    `${JSON.stringify(Object.fromEntries(entries), null, 2)}\n`,
+    "utf-8",
+  )
+}
+
 export function saveModelPreference(
   modelPreference: RecapModelPreference,
 ): void {
-  const config: RecapConfig = {
-    model: formatRecapModelKey(modelPreference),
-  }
-  mkdirSync(CONFIG_DIR, { recursive: true })
-  writeFileSync(CONFIG_PATH, `${JSON.stringify(config, null, 2)}\n`, "utf-8")
+  const config = readConfigSafe()
+  config.model = formatRecapModelKey(modelPreference)
+  writeConfig(config)
 }
 
 export function deleteRecapConfig(): void {
-  rmSync(CONFIG_PATH, { force: true })
+  // Reset only the model preference; preserve display settings.
+  const config = readConfigSafe()
+  delete config.model
+  writeConfig(config)
+}
+
+export function saveDisplaySetting<K extends keyof RecapDisplaySettings>(
+  key: K,
+  value: RecapDisplaySettings[K] | undefined,
+): void {
+  const config = readConfigSafe()
+  if (value === undefined) {
+    delete config[key]
+  } else {
+    config[key] = value
+  }
+  writeConfig(config)
+}
+
+export function resolveDisplaySettings(): RecapDisplaySettings {
+  const config = readConfigSafe()
+  const color =
+    typeof config.color === "string" && isRecapColor(config.color)
+      ? config.color
+      : DEFAULT_RECAP_DISPLAY.color
+  const blankLineAbove =
+    typeof config.blankLineAbove === "boolean"
+      ? config.blankLineAbove
+      : DEFAULT_RECAP_DISPLAY.blankLineAbove
+  const persist =
+    typeof config.persist === "boolean"
+      ? config.persist
+      : DEFAULT_RECAP_DISPLAY.persist
+  return { color, blankLineAbove, persist }
 }
 
 export function resolveInitialModelConfig(): RecapModelConfig {
